@@ -59,8 +59,8 @@ from .data import (
 )
 from .metrics import (
     action_set_metrics,
+    dynamics_paired_improvements,
     dynamics_summary,
-    paired_relative_improvement,
     reliability_summary,
     survival_summary,
 )
@@ -71,6 +71,7 @@ from .synthetic import ToyEnv, ToyState, encode_state, env_cost, optimal_expecte
 from .types import Action, PatientState
 from .world import (
     EnsembleWorldModel,
+    LegacyOneStepDynamics,
     OneStepDynamics,
     PersistenceDynamics,
     ensemble_mean_and_disagreement,
@@ -270,6 +271,7 @@ def doctor(config: dict[str, Any], artifacts: RunArtifacts, run_name: str) -> di
         "timeline": "file",
         "timeline_alternative": "file",
         "latent_dir": "directory",
+        "latent_provenance": "file",
         "legacy_trajectories": "directory",
         "source_project": "directory",
         "clarity_root": "directory",
@@ -284,7 +286,8 @@ def doctor(config: dict[str, Any], artifacts: RunArtifacts, run_name: str) -> di
             "exists": exists,
             "readable": exists and os.access(path, os.R_OK),
             "required_for": (
-                "main_v1" if key in {"timeline", "timeline_alternative", "latent_dir"}
+                "main_v1"
+                if key in {"timeline", "timeline_alternative", "latent_dir", "latent_provenance"}
                 else "legacy_stage1" if key == "legacy_trajectories"
                 else "provenance_or_future_raw_encoding"
             ),
@@ -327,7 +330,11 @@ def doctor(config: dict[str, Any], artifacts: RunArtifacts, run_name: str) -> di
             "writable_or_creatable": os.access(existing_parent, os.W_OK),
         }
     protocol = config["data"]["protocol"]
-    needed = ["timeline", "timeline_alternative", "latent_dir"] if protocol == "main_v1" else ["legacy_trajectories"]
+    needed = (
+        ["timeline", "timeline_alternative", "latent_dir", "latent_provenance"]
+        if protocol == "main_v1"
+        else ["legacy_trajectories"]
+    )
     ok = (
         all(checks[key]["readable"] for key in needed)
         and all(row["writable_or_creatable"] for row in checks["destinations"].values())
@@ -350,7 +357,7 @@ def prepare(config: dict[str, Any], artifacts: RunArtifacts, run_name: str) -> d
     manifest = existing or _new_run_manifest(config, run_name, device)
     _check_manifest_config(manifest, config)
     protocol = config["data"]["protocol"]
-    cache_name = "brainiac_main.pt" if protocol == "main_v1" else "brainiac_legacy.pt"
+    cache_name = "brainiac_main_v2.pt" if protocol == "main_v1" else "brainiac_legacy.pt"
     cache_path = Path(config["paths"]["cache_root"]) / cache_name
     cache, reused = prepare_cache(config, cache_path)
     ids = [row["patient_id"] for row in cache["patients"]]
@@ -383,6 +390,7 @@ def prepare(config: dict[str, Any], artifacts: RunArtifacts, run_name: str) -> d
         data_signature=cache["data_signature"],
         data_provenance=cache["source"],
         encoder_provenance=cache["encoder"],
+        latent_provenance_hash=cache["encoder"].get("provenance_manifest_sha256"),
         split=split,
         cohort={"patients": len(ids), "split_counts": {k: len(v) for k, v in split.items()}, "windows": window_counts},
         audit=cache.get("audit", {}),
@@ -392,7 +400,10 @@ def prepare(config: dict[str, Any], artifacts: RunArtifacts, run_name: str) -> d
                 "this assumption must be disclosed"
             ),
             "progression_input": "disabled unless a reliable occurrence date is audited",
-            "time_quality": "unknown or legacy_imputed flags are preserved; TP numbering is never used as time",
+            "time_quality": (
+                "per-timepoint observed/imputed/unknown provenance is preserved and audited; "
+                "TP numbering is never used as time"
+            ),
         },
         action_vocab=list(bundle.action_codec.vocab),
         action_catalog=[
@@ -438,7 +449,13 @@ def _to_device(batch: dict[str, Any], device: torch.device) -> dict[str, Any]:
     return {key: value.to(device) if isinstance(value, Tensor) else value for key, value in batch.items()}
 
 
-def _new_world_member(config: dict[str, Any], bundle: DataBundle, device: torch.device) -> OneStepDynamics:
+def _new_world_member(
+    config: dict[str, Any], bundle: DataBundle, device: torch.device
+) -> torch.nn.Module:
+    if config["data"]["protocol"] == "legacy_stage1":
+        return LegacyOneStepDynamics.from_config(
+            config, bundle.latent_dim, bundle.action_dim
+        ).to(device)
     return OneStepDynamics.from_config(
         config, bundle.latent_dim, bundle.action_dim, bundle.clinical_dim, bundle.history_dim
     ).to(device)
@@ -665,6 +682,11 @@ def train_dynamics(
                 histories.append({"member": member, "best_epoch": best_epoch, "history": history})
                 entry["complete"] = len(entry["member_states"]) == member_count
                 entry["config"] = copy.deepcopy(config["world"])
+                entry["architecture"] = (
+                    "legacy_stage1_exact"
+                    if config["data"]["protocol"] == "legacy_stage1"
+                    else "cloop_main_v1"
+                )
                 entry["parameter_count_per_member"] = sum(
                     p.numel() for p in _new_world_member(config, bundle, torch.device("cpu")).parameters()
                 )
@@ -733,7 +755,9 @@ def _evaluate_world(
             terminal = terminal_states(rollout, batch["horizons"])
             mean, disagreement = ensemble_mean_and_disagreement(terminal)
             per_sample = ((mean - batch["target"]) ** 2).mean(-1)
-            cosine = torch.nn.functional.cosine_similarity(mean, batch["target"], dim=-1)
+            cosine_similarity = torch.nn.functional.cosine_similarity(
+                mean, batch["target"], dim=-1
+            )
             for i in range(len(per_sample)):
                 error = float(per_sample[i].cpu())
                 u = float(disagreement[i].cpu())
@@ -754,7 +778,7 @@ def _evaluate_world(
                         "target_timepoint": raw["target_timepoint"][i],
                         "horizon": int(horizon),
                         "mse": error,
-                        "cosine": float(cosine[i].cpu()),
+                        "cosine_similarity": float(cosine_similarity[i].cpu()),
                         "disagreement": u if model.ensemble_size > 1 else None,
                         "conditioning": "factual_actions_and_times",
                     }
@@ -807,12 +831,7 @@ def evaluate_dynamics(
                     }
             if summary.get("long_mse") is not None:
                 summary_by_variant[variant][str(seed)] = float(summary["long_mse"])
-    base = summary_by_variant.get("baseline", {})
-    ri = {
-        variant: paired_relative_improvement(base, values)
-        for variant, values in summary_by_variant.items()
-        if variant not in {"baseline", "persistence"}
-    }
+    ri = dynamics_paired_improvements(summary_by_variant)
     metrics["dynamics"].setdefault(split, {})["paired_relative_improvement"] = ri
     if config["artifacts"]["save_predictions_jsonl"]:
         upsert_jsonl(artifacts.path("predictions.jsonl"), predictions)
@@ -1408,7 +1427,8 @@ def _replay_summary(rows: Sequence[dict[str, Any]]) -> dict[str, Any]:
         "conditional_on_recommendation": conditional,
         "unconditional": unconditional,
         "replanning_action_change_rate": changed / comparisons if comparisons else None,
-        "structural_rule_violation_rate": 0.0,
+        "structural_rule_violation_rate": None,
+        "structural_rule_violation_reason": "clinical_rules_disabled",
         "wall_time_ms_mean": float(np.mean([x.get("wall_time_ms", 0.0) for x in diagnostics])),
         "world_model_forwards": int(sum(x.get("world_model_forwards", 0) for x in diagnostics)),
         "beam_nodes": int(sum(x.get("beam_nodes", 0) for x in diagnostics)),

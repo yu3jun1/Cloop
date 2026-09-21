@@ -1,0 +1,11 @@
+{
+  "encoder": "brainiac",
+  "frozen": true,
+  "adapter": null,
+  "checkpoint": "/home/tanyuejun/CLARITY/BrainIAC-main/src/checkpoints/BrainIAC.ckpt",
+  "checkpoint_sha256": "f22bdbcae26823a9d9e8aee883c6f24386ba4617339c12269848b6666cc62693",
+  "output_dim": 768,
+  "extraction_protocol": "brainiac_mean_v1",
+  "source_commit": "b5e3b979e46e6ec254d72aac46fbc352b311bed6",
+  "num_timepoints": 596
+}

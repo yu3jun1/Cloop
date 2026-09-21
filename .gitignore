@@ -8,4 +8,4 @@ __pycache__/
 .coverage
 build/
 dist/
-
+settings.json

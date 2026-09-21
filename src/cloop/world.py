@@ -121,6 +121,92 @@ class OneStepDynamics(nn.Module):
         return z + self.residual(torch.cat((z, hidden), -1))
 
 
+class LegacyOneStepDynamics(nn.Module):
+    """Exact Stage 1 architecture retained only for legacy numeric regression."""
+
+    def __init__(
+        self,
+        latent_dim: int,
+        action_dim: int,
+        *,
+        hidden_dim: int = 128,
+        action_embed_dim: int = 32,
+        time_embed_dim: int = 16,
+        delta_scale_days: float = 365.0,
+    ):
+        super().__init__()
+        self.latent_dim = int(latent_dim)
+        self.action_dim = int(action_dim)
+        self.delta_scale_days = float(delta_scale_days)
+        self.action_projection = nn.Sequential(
+            nn.Linear(action_dim, action_embed_dim),
+            nn.LayerNorm(action_embed_dim),
+            nn.SiLU(),
+        )
+        self.time_projection = nn.Sequential(
+            nn.Linear(1, time_embed_dim),
+            nn.SiLU(),
+            nn.Linear(time_embed_dim, time_embed_dim),
+        )
+        self.gru = nn.GRU(
+            action_embed_dim + time_embed_dim,
+            hidden_dim,
+            batch_first=True,
+        )
+        self.network = nn.Sequential(
+            nn.LayerNorm(latent_dim + hidden_dim),
+            nn.Linear(latent_dim + hidden_dim, hidden_dim),
+            nn.SiLU(),
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.SiLU(),
+            nn.Linear(hidden_dim, latent_dim),
+        )
+        nn.init.normal_(self.network[-1].weight, std=0.01)
+        nn.init.zeros_(self.network[-1].bias)
+
+    @classmethod
+    def from_config(
+        cls,
+        config: dict[str, Any],
+        latent_dim: int,
+        action_dim: int,
+    ) -> "LegacyOneStepDynamics":
+        world = config["world"]
+        return cls(
+            latent_dim,
+            action_dim,
+            hidden_dim=world["hidden_dim"],
+            action_embed_dim=world["action_embed_dim"],
+            time_embed_dim=world["time_embed_dim"],
+            delta_scale_days=world["delta_scale_days"],
+        )
+
+    def forward(
+        self,
+        z: Tensor,
+        action: Tensor,
+        delta_days: Tensor,
+        clinical: Tensor,
+        clinical_mask: Tensor,
+        history: Tensor,
+    ) -> Tensor:
+        del clinical, clinical_mask, history
+        if z.ndim != 2 or z.shape[-1] != self.latent_dim:
+            raise WorldModelError("z must be [B,latent_dim]")
+        if action.shape != (z.shape[0], self.action_dim):
+            raise WorldModelError("action shape mismatch")
+        delta_days = delta_days.reshape(-1)
+        if delta_days.shape[0] != z.shape[0] or bool((delta_days <= 0).any()):
+            raise WorldModelError("active dynamics steps require strictly positive delta_days")
+        scaled = torch.log1p(delta_days.clamp_min(0.0)) / math.log1p(self.delta_scale_days)
+        sequence = torch.cat(
+            (self.action_projection(action), self.time_projection(scaled[:, None])),
+            dim=-1,
+        )
+        _, hidden = self.gru(sequence[:, None, :])
+        return z + self.network(torch.cat((z, hidden[-1]), dim=-1))
+
+
 class PersistenceDynamics(nn.Module):
     """D0: explicit no-training baseline."""
 

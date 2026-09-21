@@ -6,7 +6,7 @@ import pytest
 import torch
 from torch import nn
 
-from cloop.data import ActionCodec, empty_history, patient_state
+from cloop.data import ActionCodec, empty_history, patient_state, update_history
 from cloop.engine import _decision_record
 from cloop.planner import Planner
 from cloop.policy import CatalogPolicy, FakeProvider, LLMPolicy, PolicyError
@@ -131,6 +131,32 @@ def test_new_observation_can_change_greedy_action_and_cache_is_decision_scoped()
     second = planner.plan(negative)
     assert first.recommended_action != second.recommended_action
     assert sum(len(member.actions) for member in world.members) > calls_after_first
+
+
+def test_h3_mpc_reobserves_and_replans_instead_of_following_fixed_plan():
+    codec, world, catalog, initial = _setup_planner_state()
+    planner = _planner(codec, world, catalog, horizon=3)
+    first = planner.plan(initial)
+    assert len(first.imagined_plan) == 3
+    executed = first.recommended_action
+    assert executed is not None
+    action_vector = torch.zeros(codec.dim)
+    action_vector[list(executed.token_ids)] = 1.0
+    observed_history = update_history(initial.history, action_vector, 30.0)
+    reobserved = PatientState(
+        "P",
+        "T1",
+        30.0,
+        torch.tensor([-2.0]),
+        initial.clinical,
+        initial.clinical_mask,
+        observed_history,
+        "observed",
+        1,
+    )
+    replanned = planner.plan(reobserved)
+    assert replanned.recommended_action is not None
+    assert replanned.recommended_action != first.imagined_plan[1]
 
 
 def test_all_invalid_candidates_abstain_before_world_call():

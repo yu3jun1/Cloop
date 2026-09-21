@@ -32,13 +32,15 @@ def dynamics_summary(records: Sequence[dict[str, Any]]) -> dict[str, Any]:
     for horizon in sorted(by_horizon):
         rows = by_horizon[horizon]
         mse = [float(row["mse"]) for row in rows]
-        cosine = [float(row["cosine"]) for row in rows]
+        cosine_similarity = [float(row["cosine_similarity"]) for row in rows]
         patient_values: dict[str, list[float]] = defaultdict(list)
         for row in rows:
             patient_values[str(row["patient_id"])].append(float(row["mse"]))
         patient_macro = [float(np.mean(v)) for v in patient_values.values()]
         result[f"mse@{horizon}"] = float(np.mean(mse)) if mse else None
-        result[f"cosine@{horizon}"] = float(np.mean(cosine)) if cosine else None
+        result[f"CosSim@{horizon}"] = (
+            float(np.mean(cosine_similarity)) if cosine_similarity else None
+        )
         result[f"patient_macro_mse@{horizon}"] = float(np.mean(patient_macro)) if patient_macro else None
         result[f"n@{horizon}"] = len(rows)
         result[f"patients@{horizon}"] = len(patient_values)
@@ -59,6 +61,23 @@ def paired_relative_improvement(base_by_seed: dict[str, float], candidate_by_see
         paired[seed] = 100.0 * (base - float(candidate_by_seed[seed])) / base
     summary = mean_std(list(paired.values()))
     return {"per_seed": paired, **summary}
+
+
+def dynamics_paired_improvements(
+    summary_by_variant: dict[str, dict[str, float]],
+) -> dict[str, dict[str, Any]]:
+    comparisons = {
+        "baseline_vs_rrt": ("baseline", "rrt"),
+        "ensemble_vs_rrt_ensemble": ("ensemble", "rrt_ensemble"),
+        "baseline_vs_rrt_ensemble": ("baseline", "rrt_ensemble"),
+    }
+    return {
+        name: paired_relative_improvement(
+            summary_by_variant.get(base, {}),
+            summary_by_variant.get(candidate, {}),
+        )
+        for name, (base, candidate) in comparisons.items()
+    }
 
 
 def _rankdata(values: np.ndarray) -> np.ndarray:

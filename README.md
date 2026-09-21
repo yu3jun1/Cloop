@@ -27,6 +27,18 @@ PY=/home/tanyuejun/miniconda3/envs/py310/bin/python
 
 Global options must precede the subcommand.
 
+`main_v1` requires the explicit JSON file configured by
+`paths.latent_provenance`. During `prepare`, the encoder identity, frozen
+status, null adapter, 768-D output, checkpoint path and SHA-256, extraction
+protocol, source commit, and latent count are verified. The provenance hash is
+stored in both the cache metadata and `run.json`.
+
+Timeline nodes may provide `mri_day_source` as `observed`,
+`imputed_interior`, `imputed_leading`, `imputed_trailing`, or `unknown`.
+Missing or unrecognized values remain `unknown`; a numeric date is never
+silently treated as observed. The preparation audit reports source counts and
+affected transitions/H2/H3 windows.
+
 ```bash
 PY=/home/tanyuejun/miniconda3/envs/py310/bin/python
 
@@ -54,7 +66,10 @@ CUDA_VISIBLE_DEVICES=7 "$PY" -m cloop --config configs/default.yaml \
 
 For a complete-epoch recovery, repeat the matching training command with `--resume`. `last.pt` includes the model, optimizer, early-stopping state, data generator, and Python/NumPy/Torch RNG states. It is removed after the selected training suite finishes.
 
-The optional legacy regression protocol must be a separate run:
+The optional legacy regression protocol must be a separate run. It uses
+`LegacyOneStepDynamics`, whose LayerNorm, time MLP, single-token GRU,
+residual MLP, parameter names, and final-layer initialization match the
+historical Stage 1 model:
 
 ```bash
 "$PY" -m cloop --config configs/default.yaml --paths configs/server.yaml \
@@ -69,6 +84,11 @@ CUDA_VISIBLE_DEVICES=7 "$PY" -m cloop --config configs/default.yaml \
 ```
 
 Its `A0/A1/A2` actions and state variables have no medical meaning. Results test feedback, replanning, perturbation recovery, constraints, and inference budgets only.
+
+Dynamics metrics call cosine similarity `CosSim@1/2/3` (larger is better).
+Paired relative improvements are reported as `baseline_vs_rrt`,
+`ensemble_vs_rrt_ensemble`, and `baseline_vs_rrt_ensemble`. When clinical
+rules are disabled, structural-rule violation rate is `null`, not zero.
 
 ## Artifacts and privacy boundary
 

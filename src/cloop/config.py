@@ -68,6 +68,15 @@ def _validate(cfg: dict[str, Any]) -> None:
         raise ConfigError("data.protocol must be main_v1 or legacy_stage1")
     if data["action_alignment"] not in {"timestamps", "legacy_source"}:
         raise ConfigError("invalid data.action_alignment")
+    expected_alignment = "timestamps" if data["protocol"] == "main_v1" else "legacy_source"
+    if data["action_alignment"] != expected_alignment:
+        raise ConfigError(
+            f"{data['protocol']} requires data.action_alignment={expected_alignment}"
+        )
+    if data["unknown_interval_policy"] != "exclude_action_conditioned":
+        raise ConfigError(
+            "v1 only implements data.unknown_interval_policy=exclude_action_conditioned"
+        )
     if abs(data["train_fraction"] + data["validation_fraction"] - 0.85) > 1e-8:
         raise ConfigError("train_fraction + validation_fraction must equal 0.85 (test is 0.15)")
     if not 1 <= int(world["max_horizon"]) <= 3 or not 1 <= int(planner["horizon"]) <= 3:
@@ -82,6 +91,12 @@ def _validate(cfg: dict[str, Any]) -> None:
         raise ConfigError("outcome.edges_days must strictly increase from zero")
     if planner["lambda_uncertainty"] < 0 or planner["beam_width"] < 1:
         raise ConfigError("invalid planner settings")
+    if planner["interval_source"] != "train_median":
+        raise ConfigError("v1 only implements planner.interval_source=train_median")
+    if planner["require_supported_actions"] is not True:
+        raise ConfigError("v1 requires planner.require_supported_actions=true")
+    if planner["abstain_when_no_valid_action"] is not True:
+        raise ConfigError("v1 requires planner.abstain_when_no_valid_action=true")
     if cfg["policy"]["kind"] not in {"catalog", "llm"}:
         raise ConfigError("policy.kind must be catalog or llm")
     if cfg["policy"]["allow_network"] and cfg["policy"]["kind"] == "catalog":
@@ -121,7 +136,8 @@ def load_config(
             "paths": {
                 "project_root": "", "source_project": "", "clarity_root": "", "timeline": "",
                 "timeline_alternative": "", "latent_dir": "", "legacy_trajectories": "",
-                "mri_root": "", "brainiac_checkpoint": "", "cache_root": "", "output_root": "",
+                "latent_provenance": "", "mri_root": "", "brainiac_checkpoint": "",
+                "cache_root": "", "output_root": "",
             },
             "runtime": {
                 "python_reference": "", "allowed_physical_gpus": [], "preferred_physical_gpu": 0,
@@ -136,6 +152,7 @@ def load_config(
             "timeline": "",
             "timeline_alternative": "",
             "latent_dir": "",
+            "latent_provenance": "",
             "legacy_trajectories": "",
             "mri_root": "",
             "brainiac_checkpoint": "",

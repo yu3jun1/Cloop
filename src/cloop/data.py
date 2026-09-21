@@ -328,7 +328,7 @@ def update_history(history: Tensor, action: Tensor, delta_days: Tensor | float) 
     action_dim = action.shape[-1]
     last = action.float()
     cumulative = history[..., action_dim : 2 * action_dim] + action.float()
-    count = history[..., 2 * action_dim : 2 * action_dim + 1] + 0.1
+    count = history[..., 2 * action_dim : 2 * action_dim + 1] + 1.0
     delta = torch.as_tensor(delta_days, dtype=history.dtype, device=history.device)
     while delta.ndim < history.ndim:
         delta = delta.unsqueeze(-1)
@@ -340,6 +340,88 @@ def _finite_day(value: Any) -> float | None:
     if isinstance(value, (int, float)) and math.isfinite(float(value)):
         return float(value)
     return None
+
+
+MRI_DAY_SOURCES = (
+    "observed",
+    "imputed_interior",
+    "imputed_leading",
+    "imputed_trailing",
+    "unknown",
+)
+
+
+def _mri_day_source(node: dict[str, Any]) -> str:
+    """Return only auditable source labels; never infer observation from a numeric date."""
+    value = node.get("mri_day_source")
+    if value is None and isinstance(node.get("quality_flags"), dict):
+        value = node["quality_flags"].get("mri_day_source")
+    normalized = _norm_term(value).replace("-", "_").replace(" ", "_")
+    aliases = {
+        "interior": "imputed_interior",
+        "interpolated": "imputed_interior",
+        "imputed_interpolated": "imputed_interior",
+        "leading": "imputed_leading",
+        "trailing": "imputed_trailing",
+    }
+    normalized = aliases.get(normalized, normalized)
+    return normalized if normalized in MRI_DAY_SOURCES else "unknown"
+
+
+def _load_latent_provenance(config: dict[str, Any], latent_dir: Path) -> dict[str, Any]:
+    manifest_path = Path(config["paths"].get("latent_provenance", ""))
+    if not manifest_path.is_file():
+        raise DataError(f"latent provenance manifest is required: {manifest_path}")
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise DataError(f"cannot read latent provenance manifest: {exc}") from exc
+    if not isinstance(manifest, dict):
+        raise DataError("latent provenance manifest must be a JSON object")
+    required = {
+        "encoder",
+        "frozen",
+        "adapter",
+        "checkpoint",
+        "checkpoint_sha256",
+        "output_dim",
+        "extraction_protocol",
+        "source_commit",
+        "num_timepoints",
+    }
+    missing = sorted(required - set(manifest))
+    if missing:
+        raise DataError("latent provenance is missing fields: " + ", ".join(missing))
+    if manifest["encoder"] != "brainiac" or manifest["encoder"] != config["data"]["encoder"]:
+        raise DataError("latent provenance requires encoder=brainiac matching data.encoder")
+    if manifest["frozen"] is not True:
+        raise DataError("latent provenance requires frozen=true")
+    if manifest["adapter"] is not None:
+        raise DataError("latent provenance requires adapter=null")
+    if int(manifest["output_dim"]) != 768:
+        raise DataError("latent provenance requires output_dim=768")
+    if not str(manifest["extraction_protocol"]).strip() or not str(manifest["source_commit"]).strip():
+        raise DataError("latent provenance requires extraction_protocol and source_commit")
+    checkpoint = Path(str(manifest["checkpoint"]))
+    configured_checkpoint = Path(config["paths"].get("brainiac_checkpoint", ""))
+    if checkpoint != configured_checkpoint:
+        raise DataError("latent provenance checkpoint does not match paths.brainiac_checkpoint")
+    if not checkpoint.is_file():
+        raise DataError(f"BrainIAC checkpoint is missing: {checkpoint}")
+    actual_checkpoint_hash = sha256_file(checkpoint)
+    if actual_checkpoint_hash != str(manifest["checkpoint_sha256"]):
+        raise DataError("BrainIAC checkpoint SHA-256 does not match latent provenance")
+    actual_timepoints = len(_latent_lookup(latent_dir))
+    if int(manifest["num_timepoints"]) != actual_timepoints:
+        raise DataError(
+            "latent provenance num_timepoints does not match latent directory: "
+            f"{manifest['num_timepoints']} != {actual_timepoints}"
+        )
+    return {
+        **manifest,
+        "manifest_path": str(manifest_path),
+        "manifest_sha256": sha256_file(manifest_path),
+    }
 
 
 def _event_fingerprint(event: dict[str, Any]) -> str:
@@ -498,6 +580,7 @@ def build_main_cache(config: dict[str, Any]) -> tuple[dict[str, Any], dict[str, 
     paths = config["paths"]
     timeline_path = Path(paths["timeline"])
     latent_dir = Path(paths["latent_dir"])
+    latent_provenance = _load_latent_provenance(config, latent_dir)
     try:
         raw = json.loads(timeline_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
@@ -508,6 +591,7 @@ def build_main_cache(config: dict[str, Any]) -> tuple[dict[str, Any], dict[str, 
     latent_paths = _latent_lookup(latent_dir)
     patients: list[dict[str, Any]] = []
     audit = Counter()
+    time_quality = Counter()
     warnings: list[str] = []
     for patient_id, patient in sorted(patients_raw.items()):
         if not isinstance(patient, dict):
@@ -543,6 +627,9 @@ def build_main_cache(config: dict[str, Any]) -> tuple[dict[str, Any], dict[str, 
         events = collect_events(timeline)
         action_terms, action_known, action_audit = align_interval_actions(selected_nodes, events)
         audit.update(action_audit)
+        mri_day_sources = [_mri_day_source(node) for node in selected_nodes]
+        for source in mri_day_sources:
+            time_quality[f"timepoint_{source}"] += 1
         survival_time: list[float] = []
         survival_event: list[int] = []
         survival_valid: list[bool] = []
@@ -579,11 +666,33 @@ def build_main_cache(config: dict[str, Any]) -> tuple[dict[str, Any], dict[str, 
         if bool((days[1:] <= days[:-1]).any()):
             # Duplicate days remain auditable and must never be silently altered.
             action_known = [False if days[i + 1] <= days[i] else flag for i, flag in enumerate(action_known)]
+        for index in range(len(selected_nodes) - 1):
+            time_quality["total_transitions"] += 1
+            sources = mri_day_sources[index : index + 2]
+            if any(source.startswith("imputed_") for source in sources):
+                time_quality["transitions_involving_imputation"] += 1
+            if "unknown" in sources:
+                time_quality["transitions_involving_unknown_time"] += 1
+        for horizon in (2, 3):
+            for start in range(len(selected_nodes) - horizon):
+                if not all(action_known[start : start + horizon]):
+                    continue
+                time_quality[f"h{horizon}_windows"] += 1
+                sources = mri_day_sources[start : start + horizon + 1]
+                if any(source.startswith("imputed_") for source in sources):
+                    time_quality[f"h{horizon}_windows_involving_imputation"] += 1
+                if "unknown" in sources:
+                    time_quality[f"h{horizon}_windows_involving_unknown_time"] += 1
+        source_counts = Counter(mri_day_sources)
+        patient_time_quality = (
+            next(iter(source_counts)) if len(source_counts) == 1 else "mixed"
+        )
         patients.append(
             {
                 "patient_id": str(patient_id),
                 "timepoint_ids": [str(node.get("tp_id", i)) for i, node in enumerate(selected_nodes)],
                 "mri_days": days,
+                "mri_day_sources": mri_day_sources,
                 "latents_raw": torch.stack(selected_latents),
                 "clinical_raw": patient.get("context_static") if isinstance(patient.get("context_static"), dict) else {},
                 "events": events,
@@ -595,7 +704,10 @@ def build_main_cache(config: dict[str, Any]) -> tuple[dict[str, Any], dict[str, 
                     "valid": torch.tensor(survival_valid, dtype=torch.bool),
                     "censoring_rule": survival_rules,
                 },
-                "quality_flags": {"time_quality": "unknown"},
+                "quality_flags": {
+                    "time_quality": patient_time_quality,
+                    "mri_day_source_counts": dict(source_counts),
+                },
             }
         )
     if not patients:
@@ -603,17 +715,68 @@ def build_main_cache(config: dict[str, Any]) -> tuple[dict[str, Any], dict[str, 
     latent_dims = {int(p["latents_raw"].shape[1]) for p in patients}
     if len(latent_dims) != 1:
         raise DataError(f"inconsistent latent dimensions across patients: {sorted(latent_dims)}")
+    latent_dim = next(iter(latent_dims))
+    if latent_dim != int(latent_provenance["output_dim"]):
+        raise DataError(
+            "latent vectors do not match provenance output_dim: "
+            f"{latent_dim} != {latent_provenance['output_dim']}"
+        )
+    time_quality_report = {
+        "total_timepoints": sum(
+            time_quality[f"timepoint_{source}"] for source in MRI_DAY_SOURCES
+        ),
+        "timepoint_sources": {
+            source: time_quality[f"timepoint_{source}"] for source in MRI_DAY_SOURCES
+        },
+        "total_transitions": time_quality["total_transitions"],
+        "transitions_involving_imputation": time_quality["transitions_involving_imputation"],
+        "transitions_involving_unknown_time": time_quality["transitions_involving_unknown_time"],
+        "windows": {
+            f"H{horizon}": {
+                "eligible": time_quality[f"h{horizon}_windows"],
+                "involving_imputation": time_quality[
+                    f"h{horizon}_windows_involving_imputation"
+                ],
+                "involving_unknown_time": time_quality[
+                    f"h{horizon}_windows_involving_unknown_time"
+                ],
+            }
+            for horizon in (2, 3)
+        },
+    }
+    if time_quality_report["timepoint_sources"]["unknown"]:
+        warnings.append(
+            "MRI date provenance is absent for some timepoints; they are labeled unknown, not observed"
+        )
     cache = {
-        "schema_version": "cloop_data_v1",
+        "schema_version": "cloop_data_v2",
         "source": {
             "timeline_sha256": sha256_file(timeline_path),
             "latent_manifest_sha256": sha256_tree(latent_dir, ("*.npy",)),
-            "preparation_revision": "main_v1_alignment_r1",
+            "latent_provenance_sha256": latent_provenance["manifest_sha256"],
+            "preparation_revision": "main_v1_alignment_r2",
         },
-        "encoder": {"name": config["data"]["encoder"], "frozen": True, "latent_dim": next(iter(latent_dims))},
+        "encoder": {
+            "name": latent_provenance["encoder"],
+            "frozen": latent_provenance["frozen"],
+            "adapter": latent_provenance["adapter"],
+            "checkpoint": latent_provenance["checkpoint"],
+            "checkpoint_sha256": latent_provenance["checkpoint_sha256"],
+            "latent_dim": latent_dim,
+            "output_dim": latent_provenance["output_dim"],
+            "extraction_protocol": latent_provenance["extraction_protocol"],
+            "source_commit": latent_provenance["source_commit"],
+            "num_timepoints": latent_provenance["num_timepoints"],
+            "provenance_manifest_path": latent_provenance["manifest_path"],
+            "provenance_manifest_sha256": latent_provenance["manifest_sha256"],
+        },
         "protocol": "main_v1",
         "patients": patients,
-        "audit": {"excluded_counts": dict(audit), "warnings": warnings},
+        "audit": {
+            "excluded_counts": dict(audit),
+            "time_quality": time_quality_report,
+            "warnings": warnings,
+        },
     }
     return cache, cache["audit"]
 
@@ -694,6 +857,9 @@ def cache_signature(cache: dict[str, Any]) -> str:
                 "patient_id": row["patient_id"],
                 "timepoint_ids": row["timepoint_ids"],
                 "days": row["mri_days"].tolist(),
+                "mri_day_sources": row.get(
+                    "mri_day_sources", ["unknown"] * len(row["timepoint_ids"])
+                ),
                 "latent_shape": list(row["latents_raw"].shape),
                 "action_terms": row["action_terms"],
                 "action_known": row["action_known"].tolist(),

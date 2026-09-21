@@ -5,6 +5,7 @@ paths:
   timeline: /data/tanyuejun/CLARITY/clinical/MU_Glioma_Post/clinical_latest.json
   timeline_alternative: /home/tanyuejun/CLARITY/Predictor/dataset/MU_Glioma_Post/clinical_latest.json
   latent_dir: /data/tanyuejun/CLARITY_HAUWM_Minimal/latents/brainiac
+  latent_provenance: /home/tanyuejun/Cloop/configs/brainiac_latent_provenance.json
   legacy_trajectories: /home/tanyuejun/CLARITY_HAUWM_Minimal/data/trajectories/brainiac
   mri_root: /data/tanyuejun/CLARITY/dataset/MU-Glioma-Post
   brainiac_checkpoint: /home/tanyuejun/CLARITY/BrainIAC-main/src/checkpoints/BrainIAC.ckpt
@@ -15,4 +16,3 @@ runtime:
   python_reference: /home/tanyuejun/miniconda3/envs/py310/bin/python
   allowed_physical_gpus: [4, 5, 6, 7]
   preferred_physical_gpu: 7
-

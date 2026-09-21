@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import math
 
 import torch
 from torch import nn
@@ -8,6 +9,7 @@ from torch import nn
 from cloop.data import DynamicsDataset, collate_dynamics, window_refs
 from cloop.world import (
     EnsembleWorldModel,
+    LegacyOneStepDynamics,
     OneStepDynamics,
     PersistenceDynamics,
     ensemble_mean_and_disagreement,
@@ -38,6 +40,53 @@ def test_k1_baseline_and_rrt_with_same_initialization_match(config, tiny):
     second = copy.deepcopy(first)
     args = (batch["z0"], batch["actions"], batch["deltas"], batch["context"], batch["clinical_mask"], batch["history0"], batch["step_mask"])
     assert torch.equal(EnsembleWorldModel([first]).rollout(*args).states, EnsembleWorldModel([second]).rollout(*args).states)
+
+
+def test_legacy_stage1_architecture_matches_historical_forward(config):
+    model = LegacyOneStepDynamics.from_config(config, latent_dim=8, action_dim=3)
+    assert isinstance(model.action_projection[1], nn.LayerNorm)
+    assert isinstance(model.gru, nn.GRU)
+    assert list(model.state_dict()) == [
+        "action_projection.0.weight",
+        "action_projection.0.bias",
+        "action_projection.1.weight",
+        "action_projection.1.bias",
+        "time_projection.0.weight",
+        "time_projection.0.bias",
+        "time_projection.2.weight",
+        "time_projection.2.bias",
+        "gru.weight_ih_l0",
+        "gru.weight_hh_l0",
+        "gru.bias_ih_l0",
+        "gru.bias_hh_l0",
+        "network.0.weight",
+        "network.0.bias",
+        "network.1.weight",
+        "network.1.bias",
+        "network.3.weight",
+        "network.3.bias",
+        "network.5.weight",
+        "network.5.bias",
+    ]
+    z = torch.randn(2, 8)
+    action = torch.randn(2, 3)
+    delta = torch.tensor([30.0, 90.0])
+    scaled = torch.log1p(delta) / math.log1p(model.delta_scale_days)
+    token = torch.cat(
+        (model.action_projection(action), model.time_projection(scaled[:, None])),
+        dim=-1,
+    )
+    _, hidden = model.gru(token[:, None, :])
+    expected = z + model.network(torch.cat((z, hidden[-1]), dim=-1))
+    actual = model(
+        z,
+        action,
+        delta,
+        torch.randn(2, 5),
+        torch.ones(2, 5),
+        torch.randn(2, 9),
+    )
+    assert torch.equal(actual, expected)
 
 
 def test_recursive_second_step_uses_prediction_not_true_middle(tiny):
@@ -107,4 +156,3 @@ def test_persistence_reuses_start_without_target(tiny):
         batch["clinical_mask"], batch["history0"], batch["step_mask"]
     )
     assert torch.allclose(rollout.states[0, :, -1], batch["z0"])
-

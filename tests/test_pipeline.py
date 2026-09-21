@@ -11,7 +11,7 @@ import torch
 
 import cloop.engine as engine
 from cloop.artifacts import ArtifactError, RunArtifacts, read_torch, upsert_jsonl, write_torch
-from cloop.config import ConfigError, load_config
+from cloop.config import ConfigError, _validate, load_config
 from cloop.data import make_tiny_cache
 
 
@@ -70,6 +70,148 @@ def test_rng_and_generator_restore_matches_continuation():
     assert torch.equal(expected[3], actual[3])
 
 
+@pytest.mark.parametrize(
+    ("section", "field", "value"),
+    [
+        ("data", "action_alignment", "legacy_source"),
+        ("data", "unknown_interval_policy", "include"),
+        ("planner", "interval_source", "fixed"),
+        ("planner", "require_supported_actions", False),
+        ("planner", "abstain_when_no_valid_action", False),
+    ],
+)
+def test_config_rejects_fields_that_v1_does_not_implement(
+    config, section, field, value
+):
+    cfg = copy.deepcopy(config)
+    cfg[section][field] = value
+    with pytest.raises(ConfigError):
+        _validate(cfg)
+
+
+def test_disabled_clinical_rules_are_reported_as_not_evaluated():
+    row = {
+        "status": "recommend",
+        "metrics": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "jaccard": 1.0,
+            "both_empty": False,
+        },
+        "recommended_action": "A",
+        "patient_id": "P",
+        "catalog_covers_actual": True,
+        "candidate_contains_actual": True,
+        "diagnostics": {},
+    }
+    summary = engine._replay_summary([row])
+    assert summary["structural_rule_violation_rate"] is None
+    assert (
+        summary["structural_rule_violation_reason"]
+        == "clinical_rules_disabled"
+    )
+
+
+def _assert_nested_equal(left, right):
+    if isinstance(left, torch.Tensor):
+        assert torch.equal(left, right)
+    elif isinstance(left, dict):
+        assert left.keys() == right.keys()
+        for key in left:
+            _assert_nested_equal(left[key], right[key])
+    elif isinstance(left, (list, tuple)):
+        assert len(left) == len(right)
+        for first, second in zip(left, right):
+            _assert_nested_equal(first, second)
+    else:
+        assert left == right
+
+
+def _without_epoch_seconds(history):
+    return [
+        {key: value for key, value in row.items() if key != "epoch_seconds"}
+        for row in history
+    ]
+
+
+def test_complete_epoch_resume_matches_continuous_training(
+    config, tiny, tmp_path, monkeypatch
+):
+    _, bundle = tiny
+    cfg = copy.deepcopy(config)
+    cfg["training"].update(max_epochs=4, patience=10)
+    device = torch.device("cpu")
+
+    continuous_artifacts = RunArtifacts(tmp_path / "continuous", "run")
+    continuous_state, continuous_best_epoch, continuous_history = (
+        engine._train_world_member(
+            cfg,
+            bundle,
+            "rrt",
+            17,
+            0,
+            device,
+            continuous_artifacts,
+            resume=False,
+        )
+    )
+    continuous_last = read_torch(
+        continuous_artifacts.path("last.pt"), safe=True
+    )
+
+    resumed_artifacts = RunArtifacts(tmp_path / "resumed", "run")
+    original_write_torch = engine.write_torch
+
+    def interrupt_after_epoch_two(path, value):
+        original_write_torch(path, value)
+        if (
+            Path(path).name == "last.pt"
+            and value.get("task") == "dynamics"
+            and value.get("epoch") == 2
+        ):
+            raise RuntimeError("simulated epoch-boundary interruption")
+
+    monkeypatch.setattr(engine, "write_torch", interrupt_after_epoch_two)
+    with pytest.raises(RuntimeError, match="epoch-boundary"):
+        engine._train_world_member(
+            cfg,
+            bundle,
+            "rrt",
+            17,
+            0,
+            device,
+            resumed_artifacts,
+            resume=False,
+        )
+    monkeypatch.setattr(engine, "write_torch", original_write_torch)
+    resumed_state, resumed_best_epoch, resumed_history = (
+        engine._train_world_member(
+            cfg,
+            bundle,
+            "rrt",
+            17,
+            0,
+            device,
+            resumed_artifacts,
+            resume=True,
+        )
+    )
+    resumed_last = read_torch(resumed_artifacts.path("last.pt"), safe=True)
+
+    _assert_nested_equal(continuous_state, resumed_state)
+    _assert_nested_equal(
+        continuous_last["model_state"], resumed_last["model_state"]
+    )
+    _assert_nested_equal(
+        continuous_last["optimizer_state"], resumed_last["optimizer_state"]
+    )
+    assert continuous_best_epoch == resumed_best_epoch
+    assert _without_epoch_seconds(continuous_history) == _without_epoch_seconds(
+        resumed_history
+    )
+
+
 def test_missing_formal_model_does_not_fallback(tmp_path):
     artifacts = RunArtifacts(tmp_path, "missing")
     with pytest.raises(engine.EngineError):
@@ -88,4 +230,3 @@ def test_run_artifact_rejects_subdirectories(tmp_path):
     (artifacts.root / "seed_17").mkdir(parents=True)
     with pytest.raises(ArtifactError):
         artifacts.assert_flat()
-

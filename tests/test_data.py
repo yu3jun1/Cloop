@@ -1,18 +1,26 @@
 from __future__ import annotations
 
 import copy
+import json
 
+import numpy as np
+import pytest
 import torch
 
 from cloop.data import (
     ActionCodec,
+    DataError,
     Normalizer,
     _survival_label,
     align_interval_actions,
+    build_main_cache,
     collect_events,
+    empty_history,
     fit_preprocessing,
     load_bundle,
+    sha256_file,
     split_patients,
+    update_history,
     window_refs,
 )
 from cloop.types import Action, Decision
@@ -54,6 +62,109 @@ def test_interval_alignment_deduplicates_and_uses_timestamps():
     assert known == [True, True]
     assert actions[0] == actions[1] == ("agent:drug x", "category:chemotherapy")
     assert audit["known_interval"] == 2
+
+
+def test_history_completed_interval_count_uses_integer_semantics():
+    history = empty_history(2)
+    action = torch.tensor([1.0, 0.0])
+    first = update_history(history, action, 30.0)
+    second = update_history(first, action, 30.0)
+    assert first[4].item() == 1.0
+    assert second[4].item() == 2.0
+
+
+def _main_cache_fixture(tmp_path, config):
+    latent_dir = tmp_path / "latents"
+    latent_dir.mkdir()
+    sources = ["observed", "imputed_interior", "imputed_leading", None]
+    timeline = []
+    for index, source in enumerate(sources, start=1):
+        np.save(
+            latent_dir / f"P1_Timepoint_{index}.npy",
+            np.full(768, index, dtype=np.float32),
+        )
+        node = {
+            "tp_id": f"TP{index}",
+            "mri_day": float((index - 1) * 30),
+            "actions": {},
+        }
+        if source is not None:
+            node["mri_day_source"] = source
+        timeline.append(node)
+    timeline_path = tmp_path / "timeline.json"
+    timeline_path.write_text(
+        json.dumps({"patients": {"P1": {"timeline": timeline}}}),
+        encoding="utf-8",
+    )
+    checkpoint = tmp_path / "BrainIAC.ckpt"
+    checkpoint.write_bytes(b"frozen-brainiac-checkpoint")
+    provenance_path = tmp_path / "provenance.json"
+    provenance = {
+        "encoder": "brainiac",
+        "frozen": True,
+        "adapter": None,
+        "checkpoint": str(checkpoint),
+        "checkpoint_sha256": sha256_file(checkpoint),
+        "output_dim": 768,
+        "extraction_protocol": "brainiac_mean_v1",
+        "source_commit": "abc123",
+        "num_timepoints": 4,
+    }
+    provenance_path.write_text(json.dumps(provenance), encoding="utf-8")
+    cfg = copy.deepcopy(config)
+    cfg["paths"].update(
+        timeline=str(timeline_path),
+        latent_dir=str(latent_dir),
+        latent_provenance=str(provenance_path),
+        brainiac_checkpoint=str(checkpoint),
+    )
+    return cfg, provenance_path, provenance
+
+
+def test_main_cache_verifies_latent_provenance_and_audits_mri_time(tmp_path, config):
+    cfg, provenance_path, _ = _main_cache_fixture(tmp_path, config)
+    cache, audit = build_main_cache(cfg)
+    assert cache["encoder"]["provenance_manifest_sha256"] == sha256_file(provenance_path)
+    assert cache["encoder"]["checkpoint_sha256"] == sha256_file(
+        cfg["paths"]["brainiac_checkpoint"]
+    )
+    assert cache["patients"][0]["mri_day_sources"] == [
+        "observed",
+        "imputed_interior",
+        "imputed_leading",
+        "unknown",
+    ]
+    quality = audit["time_quality"]
+    assert quality["total_timepoints"] == 4
+    assert quality["timepoint_sources"] == {
+        "observed": 1,
+        "imputed_interior": 1,
+        "imputed_leading": 1,
+        "imputed_trailing": 0,
+        "unknown": 1,
+    }
+    assert quality["transitions_involving_imputation"] == 3
+    assert quality["windows"]["H2"]["involving_imputation"] == 2
+    assert quality["windows"]["H3"]["involving_imputation"] == 1
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("encoder", "other"),
+        ("frozen", False),
+        ("adapter", "lora"),
+        ("output_dim", 512),
+    ],
+)
+def test_main_cache_rejects_invalid_latent_provenance(
+    tmp_path, config, field, value
+):
+    cfg, provenance_path, provenance = _main_cache_fixture(tmp_path, config)
+    provenance[field] = value
+    provenance_path.write_text(json.dumps(provenance), encoding="utf-8")
+    with pytest.raises(DataError, match="provenance"):
+        build_main_cache(cfg)
 
 
 def test_undated_destination_event_breaks_continuity_without_becoming_history():
@@ -108,4 +219,3 @@ def test_continuity_break_prevents_rrt_window_crossing(config, tiny):
     bundle.trajectories[pid].action_known[1] = False
     refs = [ref for ref in window_refs(bundle, "train", mode="max_available", max_horizon=3) if ref.patient_id == pid]
     assert all(not (ref.start <= 1 < ref.start + ref.horizon) for ref in refs)
-
