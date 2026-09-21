@@ -1,0 +1,113 @@
+project:
+  name: CLARITY_Loop
+  schema_version: cloop_v1
+  device: auto
+  seed: 17
+
+data:
+  encoder: brainiac
+  protocol: main_v1
+  input_backend: cached_latents
+  split_seed: 17
+  train_fraction: 0.70
+  validation_fraction: 0.15
+  action_alignment: timestamps
+  unknown_interval_policy: exclude_action_conditioned
+  min_action_support: 2
+  use_progression: false
+  exclude_shifted_death_labels: true
+  min_latent_std: 0.000001
+
+world:
+  hidden_dim: 128
+  action_embed_dim: 32
+  time_embed_dim: 16
+  clinical_embed_dim: 16
+  history_embed_dim: 16
+  use_context: true
+  use_history: true
+  delta_scale_days: 365.0
+  ensemble_size: 5
+  max_horizon: 3
+  terminal_only: true
+  teacher_forcing: false
+
+training:
+  seeds: [7, 17, 29]
+  variants: [baseline, rrt, ensemble, rrt_ensemble]
+  batch_size: 32
+  max_epochs: 100
+  lr: 0.001
+  weight_decay: 0.0001
+  grad_clip: 1.0
+  patience: 15
+  checkpoint_metric: val_long_mse
+  num_workers: 0
+  precision: float32
+  resume_at_epoch_boundary: true
+
+outcome:
+  enabled: true
+  kind: piecewise_exponential
+  hidden_dim: 128
+  edges_days: [0, 90, 180, 365, 730]
+  score_horizon_days: 365
+  max_epochs: 100
+  lr: 0.001
+  weight_decay: 0.0001
+  patience: 15
+  checkpoint_metric: val_survival_nll
+  patient_weighted: true
+  primary_landmark: first_eligible
+  freeze_before_planning: true
+
+policy:
+  kind: catalog
+  max_candidates: 6
+  allow_network: false
+  fallback: catalog
+  llm:
+    provider: null
+    model: null
+    base_url: null
+    api_key_env: CLOOP_API_KEY
+    temperature: 0.0
+    timeout_s: 30
+    max_retries: 1
+    max_calls_per_decision: 2
+    ids_only: true
+
+planner:
+  horizon: 3
+  beam_width: 4
+  interval_source: train_median
+  lambda_uncertainty: 0.05
+  uncertainty_quantile: 0.90
+  uncertainty_clip: 5.0
+  discount_scale_days: 365.0
+  require_supported_actions: true
+  clinical_rules_path: null
+  toxicity_model: disabled
+  abstain_when_no_valid_action: true
+
+evaluation:
+  horizons: [1, 2, 3]
+  selective_coverage: 0.8
+  report_patient_macro: true
+  prediction_records: true
+  planning_methods:
+    [frequency, fixed_plan, greedy, mpc_ensemble, mpc_rrt_ensemble,
+     mpc_rrt_ensemble_unc]
+  synthetic_train_episodes: 500
+  synthetic_val_episodes: 100
+  synthetic_test_episodes: 200
+  synthetic_episode_steps: 6
+
+artifacts:
+  default_run: brainiac_v1
+  save_only_best_and_last: true
+  save_predictions_jsonl: true
+  save_raw_prompts: false
+  save_branch_tensors: false
+  allow_overwrite: false
+
