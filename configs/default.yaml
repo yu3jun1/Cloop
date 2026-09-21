@@ -13,6 +13,7 @@ data:
   validation_fraction: 0.15
   action_alignment: timestamps
   unknown_interval_policy: exclude_action_conditioned
+  require_mri_day_provenance: true
   min_action_support: 2
   use_progression: false
   exclude_shifted_death_labels: true
@@ -110,4 +111,3 @@ artifacts:
   save_raw_prompts: false
   save_branch_tensors: false
   allow_overwrite: false
-

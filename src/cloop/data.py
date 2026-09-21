@@ -25,6 +25,12 @@ class DataError(RuntimeError):
     pass
 
 
+class TimeProvenanceError(DataError):
+    def __init__(self, message: str, time_quality: dict[str, Any]):
+        super().__init__(message)
+        self.time_quality = time_quality
+
+
 def sha256_file(path: str | Path, chunk_size: int = 1024 * 1024) -> str:
     digest = hashlib.sha256()
     with Path(path).open("rb") as handle:
@@ -106,6 +112,26 @@ class Normalizer:
     @classmethod
     def from_state_dict(cls, value: dict[str, Any]) -> "Normalizer":
         return cls(value["mean"].float(), value["std"].float(), int(value.get("low_variance_count", 0)))
+
+
+@dataclass(frozen=True)
+class LegacyNormalizer(Normalizer):
+    """Historical Stage 1 float64 NumPy statistics, stored as float32 tensors."""
+
+    @classmethod
+    def fit(cls, values: Tensor, min_std: float = 1e-6) -> "LegacyNormalizer":
+        if values.ndim != 2 or values.shape[0] == 0:
+            raise DataError("normalizer needs a non-empty [N,D] tensor")
+        array = values.detach().cpu().numpy().astype(np.float64)
+        mean = array.mean(axis=0)
+        std_raw = array.std(axis=0)
+        low = std_raw < min_std
+        std = np.where(low, 1.0, std_raw)
+        return cls(
+            mean=torch.from_numpy(mean.astype(np.float32)),
+            std=torch.from_numpy(std.astype(np.float32)),
+            low_variance_count=int(low.sum()),
+        )
 
 
 def _norm_term(value: Any) -> str:
@@ -744,9 +770,17 @@ def build_main_cache(config: dict[str, Any]) -> tuple[dict[str, Any], dict[str, 
             for horizon in (2, 3)
         },
     }
-    if time_quality_report["timepoint_sources"]["unknown"]:
-        warnings.append(
-            "MRI date provenance is absent for some timepoints; they are labeled unknown, not observed"
+    unknown_count = time_quality_report["timepoint_sources"]["unknown"]
+    if (
+        config["data"]["protocol"] == "main_v1"
+        and config["data"]["require_mri_day_provenance"]
+        and unknown_count > 0
+    ):
+        source_counts = time_quality_report["timepoint_sources"]
+        raise TimeProvenanceError(
+            "main_v1 requires explicit mri_day_source for every usable timepoint; "
+            f"found {unknown_count} unknown timepoints; source counts={source_counts}",
+            time_quality_report,
         )
     cache = {
         "schema_version": "cloop_data_v2",
@@ -941,7 +975,10 @@ class DataBundle:
 def fit_preprocessing(cache: dict[str, Any], config: dict[str, Any], split_ids: dict[str, list[str]]) -> dict[str, Any]:
     by_id = {row["patient_id"]: row for row in cache["patients"]}
     train = [by_id[pid] for pid in split_ids["train"]]
-    latent_norm = Normalizer.fit(
+    normalizer_type = (
+        LegacyNormalizer if cache["protocol"] == "legacy_stage1" else Normalizer
+    )
+    latent_norm = normalizer_type.fit(
         torch.cat([row["latents_raw"].float() for row in train], 0),
         float(config["data"]["min_latent_std"]),
     )
@@ -980,6 +1017,11 @@ def fit_preprocessing(cache: dict[str, Any], config: dict[str, Any], split_ids: 
         "planned_interval_days": float(np.median(positive_deltas)),
         "interval_support_days": [float(min(positive_deltas)), float(max(positive_deltas))],
         "normalizer_source": "train_patients_only",
+        "normalizer_kind": (
+            "legacy_numpy_float64_to_float32"
+            if cache["protocol"] == "legacy_stage1"
+            else "torch_float32"
+        ),
     }
 
 

@@ -6,6 +6,7 @@ import math
 import torch
 from torch import nn
 
+from cloop.engine import resolve_member_seed
 from cloop.data import DynamicsDataset, collate_dynamics, window_refs
 from cloop.world import (
     EnsembleWorldModel,
@@ -87,6 +88,12 @@ def test_legacy_stage1_architecture_matches_historical_forward(config):
         torch.randn(2, 9),
     )
     assert torch.equal(actual, expected)
+
+
+def test_legacy_member_seed_protocol_matches_stage1():
+    assert resolve_member_seed(17, 1, 0) == 17
+    assert resolve_member_seed(17, 5, 0) == 17000
+    assert resolve_member_seed(17, 5, 4) == 17004
 
 
 def test_recursive_second_step_uses_prediction_not_true_middle(tiny):

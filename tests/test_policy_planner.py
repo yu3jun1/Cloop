@@ -186,6 +186,41 @@ def test_historical_mismatch_record_is_not_counterfactual_mse():
     assert row["evidence_level"] == "historical_action_agreement_only"
 
 
+def test_decision_record_compares_against_the_prior_future_plan():
+    codec, world, catalog, state = _setup_planner_state()
+    decision = _planner(codec, world, catalog, horizon=3).plan(state)
+    current_action = decision.recommended_action.action_id
+
+    stable = _decision_record(
+        split="test", method="mpc_rrt_ensemble", seed=17, state=state,
+        actual=decision.recommended_action, decision=decision,
+        catalog_ids=set(codec.by_id), candidate_ids=set(codec.by_id),
+        previously_planned_action_for_this_stage=current_action,
+        plan_revision_evaluable=True,
+    )
+    assert stable["previously_planned_action_for_this_stage"] == current_action
+    assert stable["plan_revision_evaluable"] is True
+    assert stable["plan_revised"] is False
+
+    other_action = next(action_id for action_id in codec.by_id if action_id != current_action)
+    revised = _decision_record(
+        split="test", method="mpc_rrt_ensemble", seed=17, state=state,
+        actual=decision.recommended_action, decision=decision,
+        catalog_ids=set(codec.by_id), candidate_ids=set(codec.by_id),
+        previously_planned_action_for_this_stage=other_action,
+        plan_revision_evaluable=True,
+    )
+    assert revised["plan_revised"] is True
+
+    greedy = _decision_record(
+        split="test", method="greedy", seed=17, state=state,
+        actual=decision.recommended_action, decision=decision,
+        catalog_ids=set(codec.by_id), candidate_ids=set(codec.by_id),
+    )
+    assert greedy["plan_revision_evaluable"] is False
+    assert greedy["plan_revised"] is None
+
+
 def test_synthetic_environment_transition_uses_executed_action():
     first = ToyEnv(ToyState(3, 1, 0), [0]).step(0)[0]
     second = ToyEnv(ToyState(3, 1, 0), [0]).step(2)[0]

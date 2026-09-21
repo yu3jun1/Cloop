@@ -10,7 +10,15 @@ import pytest
 import torch
 
 import cloop.engine as engine
-from cloop.artifacts import ArtifactError, RunArtifacts, read_torch, upsert_jsonl, write_torch
+from cloop.artifacts import (
+    ArtifactError,
+    RunArtifacts,
+    read_json,
+    read_torch,
+    upsert_jsonl,
+    write_json,
+    write_torch,
+)
 from cloop.config import ConfigError, _validate, load_config
 from cloop.data import make_tiny_cache
 
@@ -38,6 +46,11 @@ def test_minimal_prepare_train_evaluate_report_is_flat(config, tmp_path, monkeyp
     artifacts = RunArtifacts(cfg["paths"]["output_root"], "mini")
     engine.prepare(cfg, artifacts, "mini")
     engine.train_dynamics(cfg, artifacts, ["rrt"], [17])
+    models = read_torch(artifacts.path("models.pt"), safe=True)
+    metrics = read_json(artifacts.path("metrics.json"))
+    assert models["dynamics"]["rrt/17"]["member_seeds"] == [17]
+    assert metrics["training"]["rrt/17"]["member_seeds"] == [17]
+    assert metrics["training"]["rrt/17"]["members"][0]["member_seed"] == 17
     engine.evaluate_dynamics(cfg, artifacts, "validation", variants=["rrt"], seeds=[17])
     report = engine.generate_report(artifacts)
     assert report.exists()
@@ -75,6 +88,7 @@ def test_rng_and_generator_restore_matches_continuation():
     [
         ("data", "action_alignment", "legacy_source"),
         ("data", "unknown_interval_policy", "include"),
+        ("data", "require_mri_day_provenance", False),
         ("planner", "interval_source", "fixed"),
         ("planner", "require_supported_actions", False),
         ("planner", "abstain_when_no_valid_action", False),
@@ -111,6 +125,70 @@ def test_disabled_clinical_rules_are_reported_as_not_evaluated():
         summary["structural_rule_violation_reason"]
         == "clinical_rules_disabled"
     )
+
+
+def _freezable_run(config, tmp_path):
+    cfg = copy.deepcopy(config)
+    cfg["paths"]["output_root"] = str(tmp_path / "outputs")
+    artifacts = RunArtifacts(cfg["paths"]["output_root"], "freeze")
+    artifacts.root.mkdir(parents=True, exist_ok=True)
+    manifest = engine._new_run_manifest(
+        cfg, "freeze", torch.device("cpu")
+    )
+    manifest["data_signature"] = "test-data-signature"
+    manifest["uncertainty_scales"] = {
+        "rrt_ensemble/17": {"H1": 1.0, "H2": 1.0, "H3": 1.0}
+    }
+    write_json(artifacts.path("run.json"), manifest)
+    write_torch(artifacts.path("models.pt"), {"frozen": torch.tensor([1.0])})
+    return cfg, artifacts
+
+
+def test_freeze_blocks_dynamics_training(config, tmp_path):
+    cfg, artifacts = _freezable_run(config, tmp_path)
+    engine.freeze_protocol(cfg, artifacts)
+    manifest = read_json(artifacts.path("run.json"))
+    assert manifest["frozen_models_sha256"] == engine.sha256_file(
+        artifacts.path("models.pt")
+    )
+    with pytest.raises(engine.EngineError, match="protocol is frozen"):
+        engine.train_dynamics(cfg, artifacts, ["rrt"], [17])
+
+
+def test_freeze_blocks_force_task(config, tmp_path):
+    cfg, artifacts = _freezable_run(config, tmp_path)
+    engine.freeze_protocol(cfg, artifacts)
+    with pytest.raises(engine.EngineError, match="protocol is frozen"):
+        engine.train_dynamics(
+            cfg, artifacts, ["rrt"], [17], force_task=True
+        )
+
+
+def test_modified_models_pt_breaks_test_evaluation(config, tmp_path):
+    cfg, artifacts = _freezable_run(config, tmp_path)
+    engine.freeze_protocol(cfg, artifacts)
+    write_torch(
+        artifacts.path("models.pt"), {"tampered": torch.tensor([2.0])}
+    )
+    with pytest.raises(engine.EngineError, match="changed after protocol freeze"):
+        engine.evaluate_dynamics(
+            cfg, artifacts, "test", variants=["rrt"], seeds=[17]
+        )
+
+
+def test_freeze_rejects_incomplete_last_checkpoint(config, tmp_path):
+    cfg, artifacts = _freezable_run(config, tmp_path)
+    write_torch(artifacts.path("last.pt"), {"epoch": 1})
+    with pytest.raises(engine.EngineError, match="last.pt exists"):
+        engine.freeze_protocol(cfg, artifacts)
+
+
+def test_report_still_works_after_freeze(config, tmp_path):
+    cfg, artifacts = _freezable_run(config, tmp_path)
+    engine.freeze_protocol(cfg, artifacts)
+    report = engine.generate_report(artifacts)
+    assert report.is_file()
+    assert "Protocol frozen: `True`" in report.read_text(encoding="utf-8")
 
 
 def _assert_nested_equal(left, right):

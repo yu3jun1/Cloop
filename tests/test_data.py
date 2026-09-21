@@ -10,6 +10,7 @@ import torch
 from cloop.data import (
     ActionCodec,
     DataError,
+    LegacyNormalizer,
     Normalizer,
     _survival_label,
     align_interval_actions,
@@ -73,10 +74,15 @@ def test_history_completed_interval_count_uses_integer_semantics():
     assert second[4].item() == 2.0
 
 
-def _main_cache_fixture(tmp_path, config):
+def _main_cache_fixture(tmp_path, config, sources=None):
     latent_dir = tmp_path / "latents"
     latent_dir.mkdir()
-    sources = ["observed", "imputed_interior", "imputed_leading", None]
+    sources = sources or [
+        "observed",
+        "imputed_interior",
+        "imputed_leading",
+        "imputed_trailing",
+    ]
     timeline = []
     for index, source in enumerate(sources, start=1):
         np.save(
@@ -132,7 +138,7 @@ def test_main_cache_verifies_latent_provenance_and_audits_mri_time(tmp_path, con
         "observed",
         "imputed_interior",
         "imputed_leading",
-        "unknown",
+        "imputed_trailing",
     ]
     quality = audit["time_quality"]
     assert quality["total_timepoints"] == 4
@@ -140,12 +146,25 @@ def test_main_cache_verifies_latent_provenance_and_audits_mri_time(tmp_path, con
         "observed": 1,
         "imputed_interior": 1,
         "imputed_leading": 1,
-        "imputed_trailing": 0,
-        "unknown": 1,
+        "imputed_trailing": 1,
+        "unknown": 0,
     }
     assert quality["transitions_involving_imputation"] == 3
     assert quality["windows"]["H2"]["involving_imputation"] == 2
     assert quality["windows"]["H3"]["involving_imputation"] == 1
+
+
+@pytest.mark.parametrize("unknown_source", [None, "unknown", "unrecognized"])
+def test_main_v1_requires_explicit_mri_day_source(
+    tmp_path, config, unknown_source
+):
+    cfg, _, _ = _main_cache_fixture(
+        tmp_path,
+        config,
+        ["observed", "imputed_interior", unknown_source, "imputed_trailing"],
+    )
+    with pytest.raises(DataError, match="found 1 unknown timepoints"):
+        build_main_cache(cfg)
 
 
 @pytest.mark.parametrize(
@@ -219,3 +238,41 @@ def test_continuity_break_prevents_rrt_window_crossing(config, tiny):
     bundle.trajectories[pid].action_known[1] = False
     refs = [ref for ref in window_refs(bundle, "train", mode="max_available", max_horizon=3) if ref.patient_id == pid]
     assert all(not (ref.start <= 1 < ref.start + ref.horizon) for ref in refs)
+
+
+def test_legacy_normalizer_matches_numpy_float64_reference(config, tiny):
+    values = torch.tensor(
+        [
+            [0.10000001, 4.0, 7.0],
+            [0.10000002, 8.0, 7.0],
+            [0.10000003, 12.0, 7.0],
+        ],
+        dtype=torch.float32,
+    )
+    actual = LegacyNormalizer.fit(values, min_std=1e-6)
+    array = values.numpy().astype(np.float64)
+    expected_mean = array.mean(axis=0).astype(np.float32)
+    expected_std64 = array.std(axis=0)
+    expected_std = np.where(expected_std64 < 1e-6, 1.0, expected_std64).astype(
+        np.float32
+    )
+    np.testing.assert_array_equal(actual.mean.numpy(), expected_mean)
+    np.testing.assert_array_equal(actual.std.numpy(), expected_std)
+    assert actual.low_variance_count == 2
+
+    cache, bundle = tiny
+    legacy = copy.deepcopy(cache)
+    legacy["protocol"] = "legacy_stage1"
+    legacy["legacy_action_vocab"] = sorted(
+        {
+            term
+            for row in legacy["patients"]
+            for terms in row["action_terms"]
+            for term in terms
+        }
+    )
+    preprocessing = fit_preprocessing(legacy, config, bundle.split_ids)
+    assert (
+        preprocessing["normalizer_kind"]
+        == "legacy_numpy_float64_to_float32"
+    )

@@ -77,6 +77,13 @@ def _validate(cfg: dict[str, Any]) -> None:
         raise ConfigError(
             "v1 only implements data.unknown_interval_policy=exclude_action_conditioned"
         )
+    if (
+        data["protocol"] == "main_v1"
+        and data["require_mri_day_provenance"] is not True
+    ):
+        raise ConfigError(
+            "main_v1 requires data.require_mri_day_provenance=true"
+        )
     if abs(data["train_fraction"] + data["validation_fraction"] - 0.85) > 1e-8:
         raise ConfigError("train_fraction + validation_fraction must equal 0.85 (test is 0.15)")
     if not 1 <= int(world["max_horizon"]) <= 3 or not 1 <= int(planner["horizon"]) <= 3:

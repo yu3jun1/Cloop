@@ -80,6 +80,62 @@ def dynamics_paired_improvements(
     }
 
 
+def replanning_behavior_summary(
+    rows: Sequence[dict[str, Any]], method: str
+) -> dict[str, Any]:
+    changed = 0
+    comparisons = 0
+    previous_by_patient: dict[str, str | None] = {}
+    for row in rows:
+        current = row["recommended_action"]
+        patient_id = str(row["patient_id"])
+        if patient_id in previous_by_patient:
+            comparisons += 1
+            changed += current != previous_by_patient[patient_id]
+        previous_by_patient[patient_id] = current
+
+    revision_rows = [
+        row for row in rows if bool(row.get("plan_revision_evaluable"))
+    ]
+    mpc_methods = {
+        "mpc_ensemble",
+        "mpc_rrt_ensemble",
+        "mpc_rrt_ensemble_unc",
+    }
+    if method == "fixed_plan":
+        revision_rate = None
+        revision_reason = "fixed_plan_does_not_replan"
+    elif method in {"frequency", "greedy"}:
+        revision_rate = None
+        revision_reason = "no_prior_future_action_in_h1_policy"
+    elif method not in mpc_methods:
+        revision_rate = None
+        revision_reason = "method_does_not_define_plan_revision"
+    elif revision_rows:
+        revision_rate = float(
+            np.mean([bool(row["plan_revised"]) for row in revision_rows])
+        )
+        revision_reason = None
+    else:
+        revision_rate = None
+        revision_reason = "no_evaluable_consecutive_future_plan"
+    return {
+        "sequential_action_change_rate": (
+            changed / comparisons if comparisons else None
+        ),
+        "sequential_action_change_count": comparisons,
+        "plan_revision_rate": revision_rate,
+        "plan_revision_reason": revision_reason,
+        "plan_revision_evaluable_count": len(revision_rows),
+        "plan_revision_evaluable_fraction": (
+            len(revision_rows) / len(rows) if rows else None
+        ),
+        "plan_revision_interpretation": (
+            "behavioral response to new observations; a higher rate is not inherently better"
+        ),
+    }
+
+
 def _rankdata(values: np.ndarray) -> np.ndarray:
     order = np.argsort(values, kind="mergesort")
     ranks = np.empty(len(values), dtype=float)

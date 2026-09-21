@@ -43,6 +43,7 @@ from .data import (
     empty_history,
     OutcomeDataset,
     WindowRef,
+    build_main_cache,
     cache_signature,
     collate_dynamics,
     collate_outcome,
@@ -61,6 +62,7 @@ from .metrics import (
     action_set_metrics,
     dynamics_paired_improvements,
     dynamics_summary,
+    replanning_behavior_summary,
     reliability_summary,
     survival_summary,
 )
@@ -119,6 +121,18 @@ def seed_all(seed: int) -> None:
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
+
+
+def resolve_member_seed(
+    training_seed: int, member_count: int, member_index: int
+) -> int:
+    if member_count < 1 or not 0 <= member_index < member_count:
+        raise EngineError("invalid ensemble member index")
+    return (
+        int(training_seed)
+        if member_count == 1
+        else int(training_seed) * 1000 + int(member_index)
+    )
 
 
 def _tuplify(value: Any) -> Any:
@@ -242,6 +256,33 @@ def _check_manifest_config(manifest: dict[str, Any], config: dict[str, Any]) -> 
         raise EngineError("resolved configuration differs from this run; use a new run name")
 
 
+def _assert_run_mutable(manifest: dict[str, Any]) -> None:
+    if manifest.get("stage_states", {}).get("protocol_frozen"):
+        raise EngineError(
+            "protocol is frozen; model/preprocessing changes require a new run"
+        )
+    if manifest.get("test_revealed"):
+        raise EngineError(
+            "test has already been revealed; changes require a new run"
+        )
+
+
+def _assert_frozen_integrity(
+    manifest: dict[str, Any], artifacts: RunArtifacts
+) -> None:
+    if not manifest.get("stage_states", {}).get("protocol_frozen"):
+        raise EngineError("protocol is not frozen")
+    expected = manifest.get("frozen_models_sha256")
+    if not expected:
+        raise EngineError("frozen model hash is absent")
+    models_path = artifacts.path("models.pt")
+    if not models_path.is_file():
+        raise EngineError("models.pt is missing after protocol freeze")
+    current = sha256_file(models_path)
+    if current != expected:
+        raise EngineError("models.pt changed after protocol freeze; use a new run")
+
+
 def _load_models(artifacts: RunArtifacts, *, required: bool = False) -> dict[str, Any]:
     path = artifacts.path("models.pt")
     if path.exists():
@@ -342,6 +383,20 @@ def doctor(config: dict[str, Any], artifacts: RunArtifacts, run_name: str) -> di
     )
     if checks.get("timeline_hashes", {}).get("equal") is False and protocol == "main_v1":
         ok = False
+    if ok and protocol == "main_v1":
+        try:
+            _, main_audit = build_main_cache(config)
+        except DataError as exc:
+            checks["main_data_validation"] = {"ok": False, "error": str(exc)}
+            time_quality = getattr(exc, "time_quality", None)
+            if time_quality is not None:
+                checks["main_data_validation"]["time_quality"] = time_quality
+            ok = False
+        else:
+            checks["main_data_validation"] = {
+                "ok": True,
+                "time_quality": main_audit["time_quality"],
+            }
     checks["ok"] = ok
     artifacts.root.mkdir(parents=True, exist_ok=True)
     manifest = read_json(artifacts.path("run.json")) or _new_run_manifest(config, run_name, resolve_device(config["project"]["device"]))
@@ -356,6 +411,8 @@ def prepare(config: dict[str, Any], artifacts: RunArtifacts, run_name: str) -> d
     existing = read_json(artifacts.path("run.json"))
     manifest = existing or _new_run_manifest(config, run_name, device)
     _check_manifest_config(manifest, config)
+    if existing is not None:
+        _assert_run_mutable(manifest)
     protocol = config["data"]["protocol"]
     cache_name = "brainiac_main_v2.pt" if protocol == "main_v1" else "brainiac_legacy.pt"
     cache_path = Path(config["paths"]["cache_root"]) / cache_name
@@ -542,12 +599,16 @@ def _train_world_member(
     *,
     resume: bool,
 ) -> tuple[dict[str, Tensor], int, list[dict[str, Any]]]:
-    recursive, _ = variant_spec(variant, int(config["world"]["ensemble_size"]))
+    recursive, member_count = variant_spec(
+        variant, int(config["world"]["ensemble_size"])
+    )
     mode = "max_available" if recursive else "one_step"
     refs = window_refs(bundle, "train", mode=mode, max_horizon=int(config["world"]["max_horizon"]))
     if not refs:
         raise EngineError(f"no training windows for {variant}")
-    member_seed = training_seed * 1000 + member_index
+    member_seed = resolve_member_seed(
+        int(training_seed), member_count, int(member_index)
+    )
     seed_all(member_seed)
     generator = torch.Generator().manual_seed(member_seed)
     model = _new_world_member(config, bundle, device)
@@ -649,9 +710,10 @@ def train_dynamics(
     resume: bool = False,
     force_task: bool = False,
 ) -> None:
+    manifest = _manifest(artifacts)
+    _check_manifest_config(manifest, config)
+    _assert_run_mutable(manifest)
     manifest, bundle, models = _bundle_for_run(config, artifacts)
-    if manifest.get("test_revealed"):
-        raise EngineError("test results are already revealed; train changes require a new run")
     device = resolve_device(config["project"]["device"])
     validate_device_visibility(config, device)
     metrics = _load_metrics(artifacts)
@@ -663,9 +725,26 @@ def train_dynamics(
             if existing and existing.get("complete") and not force_task:
                 print(f"skip completed dynamics {key}")
                 continue
-            entry = existing or {"member_states": [], "best_epochs": [], "complete": False}
+            entry = existing or {
+                "member_states": [],
+                "member_seeds": [],
+                "best_epochs": [],
+                "complete": False,
+            }
+            entry.setdefault(
+                "member_seeds",
+                [
+                    resolve_member_seed(int(seed), member_count, member)
+                    for member in range(len(entry["member_states"]))
+                ],
+            )
             if force_task:
-                entry = {"member_states": [], "best_epochs": [], "complete": False}
+                entry = {
+                    "member_states": [],
+                    "member_seeds": [],
+                    "best_epochs": [],
+                    "complete": False,
+                }
                 metrics["training"].pop(key, None)
                 for section in ("dynamics", "reliability"):
                     for split_metrics in metrics.get(section, {}).values():
@@ -677,9 +756,18 @@ def train_dynamics(
                 state, best_epoch, history = _train_world_member(
                     config, bundle, variant, int(seed), member, device, artifacts, resume=resume
                 )
+                member_seed = resolve_member_seed(int(seed), member_count, member)
                 entry["member_states"].append(state)
+                entry["member_seeds"].append(member_seed)
                 entry["best_epochs"].append(best_epoch)
-                histories.append({"member": member, "best_epoch": best_epoch, "history": history})
+                histories.append(
+                    {
+                        "member": member,
+                        "member_seed": member_seed,
+                        "best_epoch": best_epoch,
+                        "history": history,
+                    }
+                )
                 entry["complete"] = len(entry["member_states"]) == member_count
                 entry["config"] = copy.deepcopy(config["world"])
                 entry["architecture"] = (
@@ -694,12 +782,16 @@ def train_dynamics(
                 write_torch(artifacts.path("models.pt"), models)
             metrics["training"][key] = {
                 "members": histories,
+                "member_seeds": entry["member_seeds"],
                 "best_epochs": entry["best_epochs"],
                 "member_count": member_count,
             }
             write_json(artifacts.path("metrics.json"), metrics)
             manifest["models"][key] = {
-                "complete": entry["complete"], "best_epochs": entry["best_epochs"], "member_count": member_count
+                "complete": entry["complete"],
+                "member_seeds": entry["member_seeds"],
+                "best_epochs": entry["best_epochs"],
+                "member_count": member_count,
             }
             write_json(artifacts.path("run.json"), manifest)
     manifest["stage_states"]["dynamics_done"] = all(
@@ -797,9 +889,11 @@ def evaluate_dynamics(
     config: dict[str, Any], artifacts: RunArtifacts, split: str, *, variants: Sequence[str] | None = None,
     seeds: Sequence[int] | None = None,
 ) -> None:
+    if split == "test":
+        frozen_manifest = _manifest(artifacts)
+        _check_manifest_config(frozen_manifest, config)
+        _assert_frozen_integrity(frozen_manifest, artifacts)
     manifest, bundle, models = _bundle_for_run(config, artifacts)
-    if split == "test" and not manifest["stage_states"].get("protocol_frozen"):
-        raise EngineError("freeze the protocol before revealing test metrics")
     variants = list(variants or config["training"]["variants"])
     seeds = list(seeds or config["training"]["seeds"])
     device = resolve_device(config["project"]["device"])
@@ -970,9 +1064,10 @@ def train_outcome(
     resume: bool = False,
     force_task: bool = False,
 ) -> None:
+    manifest = _manifest(artifacts)
+    _check_manifest_config(manifest, config)
+    _assert_run_mutable(manifest)
     manifest, bundle, models = _bundle_for_run(config, artifacts)
-    if manifest.get("test_revealed"):
-        raise EngineError("test results are already revealed; train changes require a new run")
     if not config["outcome"]["enabled"]:
         raise EngineError("outcome is disabled in configuration")
     device = resolve_device(config["project"]["device"])
@@ -1241,9 +1336,11 @@ def _evaluate_predicted_outcome(
 def evaluate_outcome(
     config: dict[str, Any], artifacts: RunArtifacts, split: str, *, seeds: Sequence[int] | None = None
 ) -> None:
+    if split == "test":
+        frozen_manifest = _manifest(artifacts)
+        _check_manifest_config(frozen_manifest, config)
+        _assert_frozen_integrity(frozen_manifest, artifacts)
     manifest, bundle, models = _bundle_for_run(config, artifacts)
-    if split == "test" and not manifest["stage_states"].get("protocol_frozen"):
-        raise EngineError("freeze the protocol before revealing test metrics")
     seeds = list(seeds or config["training"]["seeds"])
     device = resolve_device(config["project"]["device"])
     validate_device_visibility(config, device)
@@ -1362,8 +1459,16 @@ def _decision_record(
     decision: Any,
     catalog_ids: set[str],
     candidate_ids: set[str],
+    previously_planned_action_for_this_stage: str | None = None,
+    plan_revision_evaluable: bool = False,
 ) -> dict[str, Any]:
     recommended = decision.recommended_action
+    recommended_id = recommended.action_id if recommended is not None else None
+    revision_evaluable = bool(
+        plan_revision_evaluable
+        and previously_planned_action_for_this_stage is not None
+        and recommended_id is not None
+    )
     match = action_set_metrics(
         actual.display_terms if actual is not None else (),
         recommended.display_terms if recommended is not None else (),
@@ -1377,13 +1482,22 @@ def _decision_record(
         "patient_id": state.patient_key,
         "timepoint": state.timepoint_key,
         "state_version": state.state_version,
-        "recommended_action": recommended.action_id if recommended is not None else None,
+        "recommended_action": recommended_id,
         "recommended_terms": list(recommended.display_terms) if recommended is not None else [],
         "actual_action": actual.action_id if actual is not None else None,
         "actual_terms": list(actual.display_terms) if actual is not None else [],
         "status": decision.status,
         "reason_codes": list(decision.reason_codes),
         "imagined_plan": [action.action_id for action in decision.imagined_plan],
+        "previously_planned_action_for_this_stage": (
+            previously_planned_action_for_this_stage
+        ),
+        "plan_revision_evaluable": revision_evaluable,
+        "plan_revised": (
+            recommended_id != previously_planned_action_for_this_stage
+            if revision_evaluable
+            else None
+        ),
         "catalog_covers_actual": actual is not None and actual.action_id in catalog_ids,
         "candidate_contains_actual": actual is not None and actual.action_id in candidate_ids,
         "metrics": match,
@@ -1393,9 +1507,15 @@ def _decision_record(
     }
 
 
-def _replay_summary(rows: Sequence[dict[str, Any]]) -> dict[str, Any]:
+def _replay_summary(
+    rows: Sequence[dict[str, Any]], method: str = "unknown"
+) -> dict[str, Any]:
     if not rows:
-        return {"n": 0, "reason": "no_evaluable_transitions"}
+        return {
+            "n": 0,
+            "reason": "no_evaluable_transitions",
+            **replanning_behavior_summary(rows, method),
+        }
     recommended = [row for row in rows if row["status"] == "recommend"]
     unconditional = {
         key: float(np.mean([row["metrics"][key] if row["status"] == "recommend" else 0.0 for row in rows]))
@@ -1405,16 +1525,7 @@ def _replay_summary(rows: Sequence[dict[str, Any]]) -> dict[str, Any]:
         key: float(np.mean([row["metrics"][key] for row in recommended])) if recommended else None
         for key in ("precision", "recall", "f1", "jaccard")
     }
-    changed = 0
-    comparisons = 0
-    previous_by_patient: dict[str, str | None] = {}
-    for row in rows:
-        current = row["recommended_action"]
-        pid = row["patient_id"]
-        if pid in previous_by_patient:
-            comparisons += 1
-            changed += current != previous_by_patient[pid]
-        previous_by_patient[pid] = current
+    replanning = replanning_behavior_summary(rows, method)
     diagnostics = [row.get("diagnostics", {}) for row in rows]
     return {
         "n": len(rows),
@@ -1426,7 +1537,7 @@ def _replay_summary(rows: Sequence[dict[str, Any]]) -> dict[str, Any]:
         "both_empty_fraction": float(np.mean([row["metrics"]["both_empty"] for row in rows])),
         "conditional_on_recommendation": conditional,
         "unconditional": unconditional,
-        "replanning_action_change_rate": changed / comparisons if comparisons else None,
+        **replanning,
         "structural_rule_violation_rate": None,
         "structural_rule_violation_reason": "clinical_rules_disabled",
         "wall_time_ms_mean": float(np.mean([x.get("wall_time_ms", 0.0) for x in diagnostics])),
@@ -1440,9 +1551,11 @@ def _replay_summary(rows: Sequence[dict[str, Any]]) -> dict[str, Any]:
 def evaluate_replay(
     config: dict[str, Any], artifacts: RunArtifacts, split: str, *, seeds: Sequence[int] | None = None
 ) -> None:
+    if split == "test":
+        frozen_manifest = _manifest(artifacts)
+        _check_manifest_config(frozen_manifest, config)
+        _assert_frozen_integrity(frozen_manifest, artifacts)
     manifest, bundle, models = _bundle_for_run(config, artifacts)
-    if split == "test" and not manifest["stage_states"].get("protocol_frozen"):
-        raise EngineError("freeze the protocol before revealing test replay")
     seeds = list(seeds or config["training"]["seeds"])
     device = resolve_device(config["project"]["device"])
     validate_device_visibility(config, device)
@@ -1494,16 +1607,47 @@ def evaluate_replay(
                         index += block
                         version += block
             else:
+                mpc_methods = {
+                    "mpc_ensemble",
+                    "mpc_rrt_ensemble",
+                    "mpc_rrt_ensemble_unc",
+                }
+                previous_future_by_patient: dict[str, tuple[int, str]] = {}
                 for state, target in iter_observed_replay(bundle, split):
                     decision = planner.plan(state)
+                    previous = previous_future_by_patient.get(state.patient_key)
+                    previously_planned = (
+                        previous[1]
+                        if previous is not None
+                        and previous[0] == state.state_version
+                        and method in mpc_methods
+                        else None
+                    )
                     rows.append(
                         _decision_record(
                             split=split, method=method, seed=int(seed), state=state,
                             actual=target.actual_action, decision=decision,
                             catalog_ids=catalog_ids, candidate_ids=candidate_ids,
+                            previously_planned_action_for_this_stage=previously_planned,
+                            plan_revision_evaluable=previously_planned is not None,
                         )
                     )
-            metrics["replay"].setdefault(split, {})[f"{method}/{seed}"] = _replay_summary(rows)
+                    if method in mpc_methods:
+                        if (
+                            decision.status == "recommend"
+                            and len(decision.imagined_plan) >= 2
+                        ):
+                            previous_future_by_patient[state.patient_key] = (
+                                state.state_version + 1,
+                                decision.imagined_plan[1].action_id,
+                            )
+                        else:
+                            previous_future_by_patient.pop(
+                                state.patient_key, None
+                            )
+            metrics["replay"].setdefault(split, {})[
+                f"{method}/{seed}"
+            ] = _replay_summary(rows, method)
             all_records.extend(rows)
     if config["artifacts"]["save_predictions_jsonl"]:
         upsert_jsonl(artifacts.path("predictions.jsonl"), all_records)
@@ -1787,6 +1931,11 @@ def run_synthetic_suite(
 ) -> None:
     device = resolve_device(config["project"]["device"])
     validate_device_visibility(config, device)
+    artifacts.root.mkdir(parents=True, exist_ok=True)
+    existing_manifest = read_json(artifacts.path("run.json"))
+    if existing_manifest is not None:
+        _check_manifest_config(existing_manifest, config)
+        _assert_run_mutable(existing_manifest)
     data_seed = int(config["project"]["seed"])
     cache, split = _toy_cache_and_split(config, data_seed)
     preprocessing = fit_preprocessing(cache, config, split)
@@ -1795,8 +1944,7 @@ def run_synthetic_suite(
     for row in preprocessing["action_codec"]["catalog"]:
         row["support_count"] = max(1, int(row["support_count"]))
     bundle = load_bundle(cache, config, split, preprocessing)
-    artifacts.root.mkdir(parents=True, exist_ok=True)
-    manifest = read_json(artifacts.path("run.json")) or _new_run_manifest(config, run_name, device)
+    manifest = existing_manifest or _new_run_manifest(config, run_name, device)
     _check_manifest_config(manifest, config)
     if manifest.get("data_signature") not in {None, cache["data_signature"]}:
         raise EngineError("synthetic run already exists with a different generated-data signature")
@@ -1822,22 +1970,44 @@ def run_synthetic_suite(
             _, member_count = variant_spec(variant, int(config["world"]["ensemble_size"]))
             key = f"{variant}/{seed}"
             entry = models["dynamics"].get(key) or {
-                "member_states": [], "best_epochs": [], "complete": False
+                "member_states": [],
+                "member_seeds": [],
+                "best_epochs": [],
+                "complete": False,
             }
+            entry.setdefault(
+                "member_seeds",
+                [
+                    resolve_member_seed(int(seed), member_count, member)
+                    for member in range(len(entry["member_states"]))
+                ],
+            )
             member_histories = []
             for member in range(len(entry["member_states"]), member_count):
                 state, best_epoch, history = _train_world_member(
                     config, bundle, variant, int(seed), member, device, artifacts, resume=True
                 )
+                member_seed = resolve_member_seed(int(seed), member_count, member)
                 entry["member_states"].append(state)
+                entry["member_seeds"].append(member_seed)
                 entry["best_epochs"].append(best_epoch)
-                member_histories.append({"member": member, "best_epoch": best_epoch, "history": history})
+                member_histories.append(
+                    {
+                        "member": member,
+                        "member_seed": member_seed,
+                        "best_epoch": best_epoch,
+                        "history": history,
+                    }
+                )
                 entry["complete"] = len(entry["member_states"]) == member_count
                 entry["config"] = copy.deepcopy(config["world"])
                 models["dynamics"][key] = entry
                 write_torch(artifacts.path("models.pt"), models)
             metrics["training"][key] = {
-                "members": member_histories, "best_epochs": entry["best_epochs"], "member_count": member_count
+                "members": member_histories,
+                "member_seeds": entry["member_seeds"],
+                "best_epochs": entry["best_epochs"],
+                "member_count": member_count,
             }
         cost_key = f"toy_state_cost/{seed}"
         if cost_key not in models["synthetic_cost"]:
@@ -1886,18 +2056,30 @@ def run_synthetic_suite(
 def freeze_protocol(config: dict[str, Any], artifacts: RunArtifacts) -> None:
     manifest = _manifest(artifacts)
     _check_manifest_config(manifest, config)
+    if manifest["stage_states"].get("protocol_frozen"):
+        _assert_frozen_integrity(manifest, artifacts)
+        return
     if manifest.get("test_revealed"):
         raise EngineError("test has already been revealed; this run can no longer be newly frozen")
     if not manifest.get("uncertainty_scales"):
         raise EngineError("validation uncertainty scales are absent; evaluate dynamics validation first")
+    if artifacts.path("last.pt").exists():
+        raise EngineError(
+            "cannot freeze while last.pt exists; finish or clear interrupted training"
+        )
+    models_path = artifacts.path("models.pt")
+    if not models_path.is_file():
+        raise EngineError("models.pt is required before protocol freeze")
+    models_sha256 = sha256_file(models_path)
     manifest["stage_states"]["protocol_frozen"] = True
+    manifest["frozen_models_sha256"] = models_sha256
     manifest["frozen_protocol_signature"] = hashlib.sha256(
         json.dumps(
             {
                 "config_signature": manifest["config_signature"],
                 "data_signature": manifest["data_signature"],
                 "uncertainty_scales": manifest["uncertainty_scales"],
-                "models": manifest["models"],
+                "models_sha256": models_sha256,
             },
             sort_keys=True,
             separators=(",", ":"),
