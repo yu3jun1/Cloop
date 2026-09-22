@@ -1,0 +1,959 @@
+{
+  "action_catalog": [
+    {
+      "action_id": "EMPTY",
+      "known_empty": true,
+      "support_count": 100,
+      "terms": []
+    },
+    {
+      "action_id": "A_b4f8bdc5426e",
+      "known_empty": false,
+      "support_count": 65,
+      "terms": [
+        "agent:temozolomide",
+        "category:additional 1"
+      ]
+    },
+    {
+      "action_id": "A_708d09ff0e9d",
+      "known_empty": false,
+      "support_count": 23,
+      "terms": [
+        "agent:optune ttf",
+        "agent:temozolomide",
+        "category:additional 1",
+        "category:other"
+      ]
+    },
+    {
+      "action_id": "A_517d8901011f",
+      "known_empty": false,
+      "support_count": 13,
+      "terms": [
+        "agent:avastin",
+        "agent:temozolomide",
+        "category:additional 1",
+        "category:immunotherapy"
+      ]
+    },
+    {
+      "action_id": "A_07d4621ac0ea",
+      "known_empty": false,
+      "support_count": 12,
+      "terms": [
+        "agent:avastin",
+        "category:immunotherapy"
+      ]
+    },
+    {
+      "action_id": "A_b0ed04463777",
+      "known_empty": false,
+      "support_count": 8,
+      "terms": [
+        "agent:temozolomide",
+        "category:chemotherapy",
+        "category:radiation"
+      ]
+    },
+    {
+      "action_id": "A_fe60e08e0bd5",
+      "known_empty": false,
+      "support_count": 5,
+      "terms": [
+        "agent:optune ttf",
+        "category:other"
+      ]
+    },
+    {
+      "action_id": "A_7bb5d62ddc30",
+      "known_empty": false,
+      "support_count": 3,
+      "terms": [
+        "agent:avastin",
+        "agent:optune ttf",
+        "agent:temozolomide",
+        "category:additional 1",
+        "category:immunotherapy",
+        "category:other"
+      ]
+    },
+    {
+      "action_id": "A_cab1e3273914",
+      "known_empty": false,
+      "support_count": 3,
+      "terms": [
+        "category:radiation"
+      ]
+    },
+    {
+      "action_id": "A_1f24bb914c49",
+      "known_empty": false,
+      "support_count": 2,
+      "terms": [
+        "agent:temozolomide",
+        "category:additional 1",
+        "category:chemotherapy",
+        "category:radiation"
+      ]
+    },
+    {
+      "action_id": "A_4f0e0458c955",
+      "known_empty": false,
+      "support_count": 2,
+      "terms": [
+        "agent:avastin",
+        "agent:optune ttf",
+        "category:immunotherapy",
+        "category:other"
+      ]
+    },
+    {
+      "action_id": "A_b14f6725be1f",
+      "known_empty": false,
+      "support_count": 2,
+      "terms": [
+        "agent:lomustine",
+        "category:additional 2"
+      ]
+    },
+    {
+      "action_id": "A_dd9a2cbb512c",
+      "known_empty": false,
+      "support_count": 2,
+      "terms": [
+        "agent:pcv",
+        "category:additional 1"
+      ]
+    }
+  ],
+  "action_vocab": [
+    "<UNK>",
+    "agent:avastin",
+    "agent:avastin w/ temodar",
+    "agent:irinotecan",
+    "agent:keytruda",
+    "agent:litt",
+    "agent:lomustine",
+    "agent:optune ttf",
+    "agent:optune ttf ef 32 trident trial",
+    "agent:pcv",
+    "agent:temozolomide",
+    "category:additional 1",
+    "category:additional 2",
+    "category:brachy",
+    "category:chemotherapy",
+    "category:immunotherapy",
+    "category:other",
+    "category:radiation"
+  ],
+  "audit": {
+    "excluded_counts": {
+      "duplicate_mri_day": 1,
+      "excluded_unknown_interval": 16,
+      "fewer_than_two_valid_times": 48,
+      "invalid_time_interval": 1,
+      "known_interval": 376,
+      "survival_death_shifted_to_L_plus_1": 59,
+      "survival_invalid_survival_time": 78,
+      "uncertain_destination_event": 20
+    },
+    "time_quality": {
+      "timepoint_sources": {
+        "imputed_interior": 1,
+        "imputed_leading": 0,
+        "imputed_trailing": 1,
+        "observed": 546,
+        "unknown": 0
+      },
+      "total_timepoints": 548,
+      "total_transitions": 393,
+      "transitions_involving_imputation": 3,
+      "transitions_involving_unknown_time": 0,
+      "windows": {
+        "H2": {
+          "eligible": 227,
+          "involving_imputation": 2,
+          "involving_unknown_time": 0
+        },
+        "H3": {
+          "eligible": 122,
+          "involving_imputation": 2,
+          "involving_unknown_time": 0
+        }
+      }
+    },
+    "warnings": []
+  },
+  "cache_path": "/data/tanyuejun/CLARITY_Loop/cache/brainiac_main_v2.pt",
+  "cache_reused": false,
+  "cohort": {
+    "patients": 155,
+    "split_counts": {
+      "test": 24,
+      "train": 108,
+      "validation": 23
+    },
+    "windows": {
+      "test": {
+        "H1": 63,
+        "H2": 41,
+        "H3": 25
+      },
+      "train": {
+        "H1": 251,
+        "H2": 147,
+        "H3": 75
+      },
+      "validation": {
+        "H1": 62,
+        "H2": 39,
+        "H3": 22
+      }
+    }
+  },
+  "config_signature": "6e72a6bc4f0f0aa956eeb4176271bba924f0f4a0bd57804d6e0d025f13f1e405",
+  "data_assumptions": {
+    "genomics_visibility": "structured genomics are treated as baseline-known because per-test dates are not available; this assumption must be disclosed",
+    "progression_input": "disabled unless a reliable occurrence date is audited",
+    "time_quality": "per-timepoint observed/imputed/unknown provenance is preserved and audited; TP numbering is never used as time"
+  },
+  "data_provenance": {
+    "latent_manifest_sha256": "6c573bd6914aaff9042eec27d0cf383022b61861d63c0fe743d244eefa8c8a7b",
+    "latent_provenance_sha256": "3d738d708786d07da38fb3ccfb677243f3f54f0db86298bf838b322bdf2b530a",
+    "preparation_revision": "main_v1_alignment_r2",
+    "timeline_sha256": "c993e04cde0e8b06bcc6ec279443516c4bbb05961bd19efd2dc04e9f016d6754"
+  },
+  "data_signature": "d9992774629eb993ca017f51cb140032a15b0dabd63e4aa2da937d4814af20b0",
+  "doctor": {
+    "brainiac_checkpoint": {
+      "exists": true,
+      "path": "/home/tanyuejun/CLARITY/BrainIAC-main/src/checkpoints/BrainIAC.ckpt",
+      "readable": true,
+      "required_for": "provenance_or_future_raw_encoding"
+    },
+    "clarity_root": {
+      "exists": true,
+      "path": "/home/tanyuejun/CLARITY",
+      "readable": true,
+      "required_for": "provenance_or_future_raw_encoding"
+    },
+    "destination_collisions": [],
+    "destinations": {
+      "cache_root": {
+        "exists": true,
+        "path": "/data/tanyuejun/CLARITY_Loop/cache",
+        "writable_or_creatable": true
+      },
+      "output_root": {
+        "exists": true,
+        "path": "/home/tanyuejun/Cloop/outputs",
+        "writable_or_creatable": true
+      }
+    },
+    "latent_dir": {
+      "exists": true,
+      "path": "/data/tanyuejun/CLARITY_HAUWM_Minimal/latents/brainiac",
+      "readable": true,
+      "required_for": "main_v1"
+    },
+    "latent_provenance": {
+      "exists": true,
+      "path": "/home/tanyuejun/Cloop/configs/brainiac_latent_provenance.json",
+      "readable": true,
+      "required_for": "main_v1"
+    },
+    "legacy_trajectories": {
+      "exists": true,
+      "path": "/home/tanyuejun/CLARITY_HAUWM_Minimal/data/trajectories/brainiac",
+      "readable": true,
+      "required_for": "legacy_stage1"
+    },
+    "main_data_validation": {
+      "ok": true,
+      "time_quality": {
+        "timepoint_sources": {
+          "imputed_interior": 1,
+          "imputed_leading": 0,
+          "imputed_trailing": 1,
+          "observed": 546,
+          "unknown": 0
+        },
+        "total_timepoints": 548,
+        "total_transitions": 393,
+        "transitions_involving_imputation": 3,
+        "transitions_involving_unknown_time": 0,
+        "windows": {
+          "H2": {
+            "eligible": 227,
+            "involving_imputation": 2,
+            "involving_unknown_time": 0
+          },
+          "H3": {
+            "eligible": 122,
+            "involving_imputation": 2,
+            "involving_unknown_time": 0
+          }
+        }
+      }
+    },
+    "mri_root": {
+      "exists": true,
+      "path": "/data/tanyuejun/CLARITY/dataset/MU-Glioma-Post",
+      "readable": true,
+      "required_for": "provenance_or_future_raw_encoding"
+    },
+    "ok": true,
+    "python_reference": {
+      "executable": true,
+      "exists": true,
+      "path": "/home/tanyuejun/miniconda3/envs/py310/bin/python"
+    },
+    "source_project": {
+      "exists": true,
+      "path": "/home/tanyuejun/CLARITY_HAUWM_Minimal",
+      "readable": true,
+      "required_for": "provenance_or_future_raw_encoding"
+    },
+    "timeline": {
+      "exists": true,
+      "path": "/data/tanyuejun/CLARITY/clinical/MU_Glioma_Post/clinical_latest.json",
+      "readable": true,
+      "required_for": "main_v1"
+    },
+    "timeline_alternative": {
+      "exists": true,
+      "path": "/home/tanyuejun/CLARITY/Predictor/dataset/MU_Glioma_Post/clinical_latest.json",
+      "readable": true,
+      "required_for": "main_v1"
+    },
+    "timeline_hashes": {
+      "alternative": "c993e04cde0e8b06bcc6ec279443516c4bbb05961bd19efd2dc04e9f016d6754",
+      "equal": true,
+      "primary": "c993e04cde0e8b06bcc6ec279443516c4bbb05961bd19efd2dc04e9f016d6754"
+    }
+  },
+  "encoder_provenance": {
+    "adapter": null,
+    "checkpoint": "/home/tanyuejun/CLARITY/BrainIAC-main/src/checkpoints/BrainIAC.ckpt",
+    "checkpoint_sha256": "f22bdbcae26823a9d9e8aee883c6f24386ba4617339c12269848b6666cc62693",
+    "extraction_protocol": "brainiac_mean_v1",
+    "frozen": true,
+    "latent_dim": 768,
+    "name": "brainiac",
+    "num_timepoints": 596,
+    "output_dim": 768,
+    "provenance_manifest_path": "/home/tanyuejun/Cloop/configs/brainiac_latent_provenance.json",
+    "provenance_manifest_sha256": "3d738d708786d07da38fb3ccfb677243f3f54f0db86298bf838b322bdf2b530a",
+    "source_commit": "b5e3b979e46e6ec254d72aac46fbc352b311bed6"
+  },
+  "frozen_models_sha256": "c5f2aa9c34eb4ad0b1a0a3ab39df9e3feca7bd161066d2a915503e08ef4ad079",
+  "frozen_protocol_signature": "fc813db3381d95a189500f5a68b68394554d5e35107ec249a93b9f740365e2a7",
+  "latent_provenance_hash": "3d738d708786d07da38fb3ccfb677243f3f54f0db86298bf838b322bdf2b530a",
+  "limitations": [
+    "planning cost is an observational prognostic proxy, not a causal treatment effect",
+    "historical replay evaluates agreement and behavior, not counterfactual benefit",
+    "synthetic closed-loop results do not establish clinical efficacy"
+  ],
+  "models": {
+    "baseline/17": {
+      "best_epochs": [
+        3
+      ],
+      "complete": true,
+      "member_count": 1,
+      "member_seeds": [
+        17
+      ]
+    },
+    "baseline/29": {
+      "best_epochs": [
+        1
+      ],
+      "complete": true,
+      "member_count": 1,
+      "member_seeds": [
+        29
+      ]
+    },
+    "baseline/7": {
+      "best_epochs": [
+        2
+      ],
+      "complete": true,
+      "member_count": 1,
+      "member_seeds": [
+        7
+      ]
+    },
+    "clinical_only/17": {
+      "best_epoch": 7,
+      "complete": true
+    },
+    "clinical_only/29": {
+      "best_epoch": 5,
+      "complete": true
+    },
+    "clinical_only/7": {
+      "best_epoch": 9,
+      "complete": true
+    },
+    "ensemble/17": {
+      "best_epochs": [
+        4,
+        4,
+        4,
+        3,
+        5
+      ],
+      "complete": true,
+      "member_count": 5,
+      "member_seeds": [
+        17000,
+        17001,
+        17002,
+        17003,
+        17004
+      ]
+    },
+    "ensemble/29": {
+      "best_epochs": [
+        4,
+        4,
+        5,
+        7,
+        5
+      ],
+      "complete": true,
+      "member_count": 5,
+      "member_seeds": [
+        29000,
+        29001,
+        29002,
+        29003,
+        29004
+      ]
+    },
+    "ensemble/7": {
+      "best_epochs": [
+        4,
+        4,
+        1,
+        6,
+        5
+      ],
+      "complete": true,
+      "member_count": 5,
+      "member_seeds": [
+        7000,
+        7001,
+        7002,
+        7003,
+        7004
+      ]
+    },
+    "rrt/17": {
+      "best_epochs": [
+        3
+      ],
+      "complete": true,
+      "member_count": 1,
+      "member_seeds": [
+        17
+      ]
+    },
+    "rrt/29": {
+      "best_epochs": [
+        3
+      ],
+      "complete": true,
+      "member_count": 1,
+      "member_seeds": [
+        29
+      ]
+    },
+    "rrt/7": {
+      "best_epochs": [
+        3
+      ],
+      "complete": true,
+      "member_count": 1,
+      "member_seeds": [
+        7
+      ]
+    },
+    "rrt_ensemble/17": {
+      "best_epochs": [
+        3,
+        3,
+        2,
+        3,
+        2
+      ],
+      "complete": true,
+      "member_count": 5,
+      "member_seeds": [
+        17000,
+        17001,
+        17002,
+        17003,
+        17004
+      ]
+    },
+    "rrt_ensemble/29": {
+      "best_epochs": [
+        4,
+        3,
+        2,
+        3,
+        3
+      ],
+      "complete": true,
+      "member_count": 5,
+      "member_seeds": [
+        29000,
+        29001,
+        29002,
+        29003,
+        29004
+      ]
+    },
+    "rrt_ensemble/7": {
+      "best_epochs": [
+        4,
+        3,
+        4,
+        3,
+        3
+      ],
+      "complete": true,
+      "member_count": 5,
+      "member_seeds": [
+        7000,
+        7001,
+        7002,
+        7003,
+        7004
+      ]
+    },
+    "state/17": {
+      "best_epoch": 1,
+      "complete": true
+    },
+    "state/29": {
+      "best_epoch": 1,
+      "complete": true
+    },
+    "state/7": {
+      "best_epoch": 1,
+      "complete": true
+    }
+  },
+  "preprocessing": {
+    "action_dim": 18,
+    "clinical_dim": 16,
+    "history_dim": 38,
+    "interval_support_days": [
+      3.0,
+      457.0
+    ],
+    "latent_low_variance_count": 0,
+    "normalizer_source": "train_patients_only",
+    "planned_interval_days": 77.0
+  },
+  "project_dirty": false,
+  "project_revision": "74c6e4b02dee6cf294cf3799dc09d5939af807bd",
+  "references": {
+    "clarity_commit": "dadb82241a24f5ec5e4e4dc994e3116fd4a9da04",
+    "my_mewm_commit": "b5e3b979e46e6ec254d72aac46fbc352b311bed6"
+  },
+  "resolved_config": {
+    "artifacts": {
+      "allow_overwrite": false,
+      "default_run": "brainiac_v1",
+      "save_branch_tensors": false,
+      "save_only_best_and_last": true,
+      "save_predictions_jsonl": true,
+      "save_raw_prompts": false
+    },
+    "data": {
+      "action_alignment": "timestamps",
+      "encoder": "brainiac",
+      "exclude_shifted_death_labels": true,
+      "input_backend": "cached_latents",
+      "min_action_support": 2,
+      "min_latent_std": 1e-06,
+      "protocol": "main_v1",
+      "require_mri_day_provenance": true,
+      "split_seed": 17,
+      "train_fraction": 0.7,
+      "unknown_interval_policy": "exclude_action_conditioned",
+      "use_progression": false,
+      "validation_fraction": 0.15
+    },
+    "evaluation": {
+      "horizons": [
+        1,
+        2,
+        3
+      ],
+      "planning_methods": [
+        "frequency",
+        "fixed_plan",
+        "greedy",
+        "mpc_ensemble",
+        "mpc_rrt_ensemble",
+        "mpc_rrt_ensemble_unc"
+      ],
+      "prediction_records": true,
+      "report_patient_macro": true,
+      "selective_coverage": 0.8,
+      "synthetic_episode_steps": 6,
+      "synthetic_test_episodes": 200,
+      "synthetic_train_episodes": 500,
+      "synthetic_val_episodes": 100
+    },
+    "outcome": {
+      "checkpoint_metric": "val_survival_nll",
+      "edges_days": [
+        0,
+        90,
+        180,
+        365,
+        730
+      ],
+      "enabled": true,
+      "freeze_before_planning": true,
+      "hidden_dim": 128,
+      "kind": "piecewise_exponential",
+      "lr": 0.001,
+      "max_epochs": 100,
+      "patience": 15,
+      "patient_weighted": true,
+      "primary_landmark": "first_eligible",
+      "score_horizon_days": 365,
+      "weight_decay": 0.0001
+    },
+    "paths": {
+      "brainiac_checkpoint": "/home/tanyuejun/CLARITY/BrainIAC-main/src/checkpoints/BrainIAC.ckpt",
+      "cache_root": "/data/tanyuejun/CLARITY_Loop/cache",
+      "clarity_root": "/home/tanyuejun/CLARITY",
+      "latent_dir": "/data/tanyuejun/CLARITY_HAUWM_Minimal/latents/brainiac",
+      "latent_provenance": "/home/tanyuejun/Cloop/configs/brainiac_latent_provenance.json",
+      "legacy_trajectories": "/home/tanyuejun/CLARITY_HAUWM_Minimal/data/trajectories/brainiac",
+      "mri_root": "/data/tanyuejun/CLARITY/dataset/MU-Glioma-Post",
+      "output_root": "/home/tanyuejun/Cloop/outputs",
+      "project_root": "/home/tanyuejun/Cloop",
+      "source_project": "/home/tanyuejun/CLARITY_HAUWM_Minimal",
+      "timeline": "/data/tanyuejun/CLARITY/clinical/MU_Glioma_Post/clinical_latest.json",
+      "timeline_alternative": "/home/tanyuejun/CLARITY/Predictor/dataset/MU_Glioma_Post/clinical_latest.json"
+    },
+    "planner": {
+      "abstain_when_no_valid_action": true,
+      "beam_width": 4,
+      "clinical_rules_path": null,
+      "discount_scale_days": 365.0,
+      "horizon": 3,
+      "interval_source": "train_median",
+      "lambda_uncertainty": 0.05,
+      "require_supported_actions": true,
+      "toxicity_model": "disabled",
+      "uncertainty_clip": 5.0,
+      "uncertainty_quantile": 0.9
+    },
+    "policy": {
+      "allow_network": false,
+      "fallback": "catalog",
+      "kind": "catalog",
+      "llm": {
+        "api_key_env": "CLOOP_API_KEY",
+        "base_url": null,
+        "ids_only": true,
+        "max_calls_per_decision": 2,
+        "max_retries": 1,
+        "model": null,
+        "provider": null,
+        "temperature": 0.0,
+        "timeout_s": 30
+      },
+      "max_candidates": 6
+    },
+    "project": {
+      "device": "auto",
+      "name": "CLARITY_Loop",
+      "schema_version": "cloop_v1",
+      "seed": 17
+    },
+    "runtime": {
+      "allowed_physical_gpus": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "preferred_physical_gpu": 7,
+      "python_reference": "/home/tanyuejun/miniconda3/envs/py310/bin/python"
+    },
+    "training": {
+      "batch_size": 32,
+      "checkpoint_metric": "val_long_mse",
+      "grad_clip": 1.0,
+      "lr": 0.001,
+      "max_epochs": 100,
+      "num_workers": 0,
+      "patience": 15,
+      "precision": "float32",
+      "resume_at_epoch_boundary": true,
+      "seeds": [
+        7,
+        17,
+        29
+      ],
+      "variants": [
+        "baseline",
+        "rrt",
+        "ensemble",
+        "rrt_ensemble"
+      ],
+      "weight_decay": 0.0001
+    },
+    "world": {
+      "action_embed_dim": 32,
+      "clinical_embed_dim": 16,
+      "delta_scale_days": 365.0,
+      "ensemble_size": 5,
+      "hidden_dim": 128,
+      "history_embed_dim": 16,
+      "max_horizon": 3,
+      "teacher_forcing": false,
+      "terminal_only": true,
+      "time_embed_dim": 16,
+      "use_context": true,
+      "use_history": true
+    }
+  },
+  "run_name": "brainiac_main_v1_provenance",
+  "runtime": {
+    "cloop_version": "0.1.0",
+    "configured_allowed_physical_gpus": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "device": "cpu",
+    "platform": "Linux-6.8.0-71-generic-x86_64-with-glibc2.39",
+    "python": "3.10.20",
+    "python_executable": "/home/tanyuejun/miniconda3/envs/py310/bin/python",
+    "torch": "2.7.1+cu128",
+    "visible_cuda_devices": null
+  },
+  "schema_version": "cloop_run_v1",
+  "split": {
+    "test": [
+      "PatientID_0188",
+      "PatientID_0125",
+      "PatientID_0078",
+      "PatientID_0164",
+      "PatientID_0080",
+      "PatientID_0091",
+      "PatientID_0034",
+      "PatientID_0213",
+      "PatientID_0156",
+      "PatientID_0242",
+      "PatientID_0074",
+      "PatientID_0026",
+      "PatientID_0236",
+      "PatientID_0079",
+      "PatientID_0031",
+      "PatientID_0171",
+      "PatientID_0191",
+      "PatientID_0089",
+      "PatientID_0082",
+      "PatientID_0196",
+      "PatientID_0013",
+      "PatientID_0255",
+      "PatientID_0205",
+      "PatientID_0215"
+    ],
+    "train": [
+      "PatientID_0210",
+      "PatientID_0097",
+      "PatientID_0067",
+      "PatientID_0117",
+      "PatientID_0033",
+      "PatientID_0109",
+      "PatientID_0212",
+      "PatientID_0099",
+      "PatientID_0138",
+      "PatientID_0088",
+      "PatientID_0006",
+      "PatientID_0094",
+      "PatientID_0169",
+      "PatientID_0083",
+      "PatientID_0093",
+      "PatientID_0055",
+      "PatientID_0020",
+      "PatientID_0084",
+      "PatientID_0021",
+      "PatientID_0240",
+      "PatientID_0162",
+      "PatientID_0150",
+      "PatientID_0052",
+      "PatientID_0039",
+      "PatientID_0090",
+      "PatientID_0187",
+      "PatientID_0148",
+      "PatientID_0264",
+      "PatientID_0209",
+      "PatientID_0274",
+      "PatientID_0008",
+      "PatientID_0051",
+      "PatientID_0073",
+      "PatientID_0270",
+      "PatientID_0035",
+      "PatientID_0208",
+      "PatientID_0118",
+      "PatientID_0147",
+      "PatientID_0053",
+      "PatientID_0069",
+      "PatientID_0072",
+      "PatientID_0064",
+      "PatientID_0068",
+      "PatientID_0087",
+      "PatientID_0140",
+      "PatientID_0211",
+      "PatientID_0085",
+      "PatientID_0260",
+      "PatientID_0271",
+      "PatientID_0011",
+      "PatientID_0275",
+      "PatientID_0199",
+      "PatientID_0267",
+      "PatientID_0070",
+      "PatientID_0254",
+      "PatientID_0103",
+      "PatientID_0037",
+      "PatientID_0110",
+      "PatientID_0113",
+      "PatientID_0160",
+      "PatientID_0202",
+      "PatientID_0151",
+      "PatientID_0197",
+      "PatientID_0029",
+      "PatientID_0170",
+      "PatientID_0010",
+      "PatientID_0198",
+      "PatientID_0237",
+      "PatientID_0272",
+      "PatientID_0121",
+      "PatientID_0251",
+      "PatientID_0132",
+      "PatientID_0159",
+      "PatientID_0024",
+      "PatientID_0249",
+      "PatientID_0081",
+      "PatientID_0025",
+      "PatientID_0186",
+      "PatientID_0135",
+      "PatientID_0030",
+      "PatientID_0003",
+      "PatientID_0149",
+      "PatientID_0105",
+      "PatientID_0239",
+      "PatientID_0145",
+      "PatientID_0265",
+      "PatientID_0045",
+      "PatientID_0220",
+      "PatientID_0192",
+      "PatientID_0123",
+      "PatientID_0018",
+      "PatientID_0062",
+      "PatientID_0012",
+      "PatientID_0044",
+      "PatientID_0268",
+      "PatientID_0060",
+      "PatientID_0007",
+      "PatientID_0189",
+      "PatientID_0136",
+      "PatientID_0235",
+      "PatientID_0092",
+      "PatientID_0214",
+      "PatientID_0014",
+      "PatientID_0005",
+      "PatientID_0076",
+      "PatientID_0065",
+      "PatientID_0204",
+      "PatientID_0116"
+    ],
+    "validation": [
+      "PatientID_0059",
+      "PatientID_0173",
+      "PatientID_0095",
+      "PatientID_0041",
+      "PatientID_0114",
+      "PatientID_0054",
+      "PatientID_0152",
+      "PatientID_0066",
+      "PatientID_0195",
+      "PatientID_0238",
+      "PatientID_0259",
+      "PatientID_0201",
+      "PatientID_0038",
+      "PatientID_0019",
+      "PatientID_0252",
+      "PatientID_0256",
+      "PatientID_0250",
+      "PatientID_0142",
+      "PatientID_0207",
+      "PatientID_0036",
+      "PatientID_0022",
+      "PatientID_0032",
+      "PatientID_0157"
+    ]
+  },
+  "stage_states": {
+    "dynamics_done": true,
+    "evaluated": true,
+    "interrupted": false,
+    "outcome_done": true,
+    "prepared": true,
+    "protocol_frozen": true
+  },
+  "test_revealed": true,
+  "uncertainty_scales": {
+    "ensemble/17": {
+      "H1": 0.0744799830019474,
+      "H2": 0.16259605586528786,
+      "H3": 0.25098755508661275
+    },
+    "ensemble/29": {
+      "H1": 0.07813680842518805,
+      "H2": 0.1595236659049988,
+      "H3": 0.25493616014719017
+    },
+    "ensemble/7": {
+      "H1": 0.1052253223955631,
+      "H2": 0.17781503498554246,
+      "H3": 0.25582257807254793
+    },
+    "rrt_ensemble/17": {
+      "H1": 0.03521642349660396,
+      "H2": 0.09682016968727118,
+      "H3": 0.15158531218767174
+    },
+    "rrt_ensemble/29": {
+      "H1": 0.038016024976968765,
+      "H2": 0.10915862619876869,
+      "H3": 0.1412520080804825
+    },
+    "rrt_ensemble/7": {
+      "H1": 0.040851409733295437,
+      "H2": 0.11534127742052079,
+      "H3": 0.15421976000070575
+    }
+  },
+  "warnings": []
+}
