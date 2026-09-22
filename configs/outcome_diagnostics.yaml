@@ -1,0 +1,21 @@
+diagnostics:
+  # Read-only source run. Its formal test patients are excluded from all diagnostics.
+  base_run: brainiac_main_v1_provenance
+
+  # New development-only diagnostic run.
+  run: outcome_diag_v1
+
+  # Patient-level event/censoring-stratified CV over base train+validation patients.
+  folds: 5
+  fallback_folds: 3
+  fold_seed: 1701
+
+  seeds: [7, 17, 29]
+  experiments: [E0, E1, E2, E3, E4, E5]
+
+  # Fixed by the registered diagnostic design; do not tune against formal test.
+  pca_dim: 64
+  residual_hidden_dim: 32
+  shuffle_seed: 3109
+
+  save_models: true

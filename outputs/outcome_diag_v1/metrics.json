@@ -1,0 +1,4108 @@
+{
+  "schema_version": "cloop_outcome_diag_metrics_v1",
+  "summary": {
+    "experiments": {
+      "E0": {
+        "best_epoch": {
+          "mean": 7.2666666666666675,
+          "n": 5,
+          "std": 5.4843210863130345
+        },
+        "brier365": {
+          "mean": 0.2115293017883079,
+          "n": 5,
+          "std": 0.03884805848546378
+        },
+        "c_index": {
+          "mean": 0.607048814475285,
+          "n": 5,
+          "std": 0.0633653246786446
+        },
+        "nll": {
+          "mean": 2.99643033203396,
+          "n": 5,
+          "std": 0.13981814199601875
+        }
+      },
+      "E1": {
+        "best_epoch": {
+          "mean": 1.5333333333333334,
+          "n": 5,
+          "std": 0.8692269873603532
+        },
+        "brier365": {
+          "mean": 0.2701252595010347,
+          "n": 5,
+          "std": 0.03285073517707885
+        },
+        "c_index": {
+          "mean": 0.5378138881815352,
+          "n": 5,
+          "std": 0.12808698990671308
+        },
+        "nll": {
+          "mean": 3.1745285927256983,
+          "n": 5,
+          "std": 0.1429488462228359
+        }
+      },
+      "E2": {
+        "best_epoch": {
+          "mean": 1.8,
+          "n": 5,
+          "std": 1.2605113600792692
+        },
+        "brier365": {
+          "mean": 0.26215599154530617,
+          "n": 5,
+          "std": 0.0440402807178841
+        },
+        "c_index": {
+          "mean": 0.5337454375689669,
+          "n": 5,
+          "std": 0.12783465197803573
+        },
+        "nll": {
+          "mean": 3.1599190485334647,
+          "n": 5,
+          "std": 0.16090965390764314
+        }
+      },
+      "E3": {
+        "best_epoch": {
+          "mean": 1.9333333333333331,
+          "n": 5,
+          "std": 1.0381607668264958
+        },
+        "brier365": {
+          "mean": 0.2674892958380826,
+          "n": 5,
+          "std": 0.04648187467707507
+        },
+        "c_index": {
+          "mean": 0.4602264946382594,
+          "n": 5,
+          "std": 0.0990112761398975
+        },
+        "nll": {
+          "mean": 3.1810003738322865,
+          "n": 5,
+          "std": 0.0993319488839421
+        }
+      },
+      "E4": {
+        "best_epoch": {
+          "mean": 6.133333333333335,
+          "n": 5,
+          "std": 4.59830886788224
+        },
+        "brier365": {
+          "mean": 0.225003876717063,
+          "n": 5,
+          "std": 0.06552802424343421
+        },
+        "c_index": {
+          "mean": 0.5580522663610898,
+          "n": 5,
+          "std": 0.16072295231498035
+        },
+        "nll": {
+          "mean": 3.049844838255913,
+          "n": 5,
+          "std": 0.190535667597466
+        }
+      },
+      "E5": {
+        "best_epoch": {
+          "mean": 12.266666666666666,
+          "n": 5,
+          "std": 5.813776741499453
+        },
+        "brier365": {
+          "mean": 0.2031109442760505,
+          "n": 5,
+          "std": 0.05289189321783366
+        },
+        "c_index": {
+          "mean": 0.6681835511982571,
+          "n": 5,
+          "std": 0.06771744267005125
+        },
+        "nll": {
+          "mean": 2.985229103178174,
+          "n": 5,
+          "std": 0.15319427039600234
+        }
+      }
+    },
+    "paired_vs_e0": {
+      "E1": {
+        "delta_brier365": {
+          "mean": 0.058595957712726854,
+          "n": 5,
+          "std": 0.039831715120692945
+        },
+        "delta_c_index": {
+          "mean": -0.06923492629374987,
+          "n": 5,
+          "std": 0.18264949848772596
+        },
+        "delta_nll": {
+          "mean": 0.17809826069173856,
+          "n": 5,
+          "std": 0.08363587820575044
+        },
+        "direction_counts": {
+          "brier365_improved": 0,
+          "c_index_improved": 3,
+          "folds": 5,
+          "nll_improved": 0
+        },
+        "folds": [
+          {
+            "delta_brier365": 0.043526410832725876,
+            "delta_c_index": 0.08703703703703691,
+            "delta_nll": 0.28822345328788934,
+            "fold": "fold0"
+          },
+          {
+            "delta_brier365": 0.05676073741467355,
+            "delta_c_index": -0.2801120448179271,
+            "delta_nll": 0.2392616939824075,
+            "fold": "fold1"
+          },
+          {
+            "delta_brier365": 0.03299858679960588,
+            "delta_c_index": 0.08333333333333315,
+            "delta_nll": 0.08183332680414113,
+            "fold": "fold2"
+          },
+          {
+            "delta_brier365": 0.1275825563578102,
+            "delta_c_index": -0.2532679738562092,
+            "delta_nll": 0.14446598939604005,
+            "fold": "fold3"
+          },
+          {
+            "delta_brier365": 0.03211149715881881,
+            "delta_c_index": 0.01683501683501687,
+            "delta_nll": 0.13670683998821476,
+            "fold": "fold4"
+          }
+        ]
+      },
+      "E2": {
+        "delta_brier365": {
+          "mean": 0.050626689756998286,
+          "n": 5,
+          "std": 0.0404181457098337
+        },
+        "delta_c_index": {
+          "mean": -0.07330337690631811,
+          "n": 5,
+          "std": 0.18293640220104423
+        },
+        "delta_nll": {
+          "mean": 0.16348871649950478,
+          "n": 5,
+          "std": 0.07650380188354114
+        },
+        "direction_counts": {
+          "brier365_improved": 0,
+          "c_index_improved": 2,
+          "folds": 5,
+          "nll_improved": 0
+        },
+        "folds": [
+          {
+            "delta_brier365": 0.012727508880091665,
+            "delta_c_index": 0.0981481481481481,
+            "delta_nll": 0.24403624715244732,
+            "fold": "fold0"
+          },
+          {
+            "delta_brier365": 0.059396654528899445,
+            "delta_c_index": -0.2941176470588235,
+            "delta_nll": 0.22601796689443265,
+            "fold": "fold1"
+          },
+          {
+            "delta_brier365": 0.037944641157510894,
+            "delta_c_index": 0.07291666666666652,
+            "delta_nll": 0.06084486581385162,
+            "fold": "fold2"
+          },
+          {
+            "delta_brier365": 0.11617714561920037,
+            "delta_c_index": -0.24346405228758167,
+            "delta_nll": 0.1720849564056448,
+            "fold": "fold3"
+          },
+          {
+            "delta_brier365": 0.0268874985992891,
+            "delta_c_index": 0.0,
+            "delta_nll": 0.11445954623114751,
+            "fold": "fold4"
+          }
+        ]
+      },
+      "E3": {
+        "delta_brier365": {
+          "mean": 0.05595999404977474,
+          "n": 5,
+          "std": 0.04454164831752371
+        },
+        "delta_c_index": {
+          "mean": -0.1468223198370257,
+          "n": 5,
+          "std": 0.12701319149579762
+        },
+        "delta_nll": {
+          "mean": 0.18457004179832665,
+          "n": 5,
+          "std": 0.0966268575323301
+        },
+        "direction_counts": {
+          "brier365_improved": 0,
+          "c_index_improved": 1,
+          "folds": 5,
+          "nll_improved": 0
+        },
+        "folds": [
+          {
+            "delta_brier365": 0.12813050890765726,
+            "delta_c_index": 0.03888888888888886,
+            "delta_nll": 0.3407586231327153,
+            "fold": "fold0"
+          },
+          {
+            "delta_brier365": 0.03197003228735368,
+            "delta_c_index": -0.2212885154061624,
+            "delta_nll": 0.1784416140895333,
+            "fold": "fold1"
+          },
+          {
+            "delta_brier365": 0.024365782446017892,
+            "delta_c_index": -0.09375000000000011,
+            "delta_nll": 0.09595115539307386,
+            "fold": "fold2"
+          },
+          {
+            "delta_brier365": 0.025128137780461884,
+            "delta_c_index": -0.16503267973856206,
+            "delta_nll": 0.11401383279169508,
+            "fold": "fold3"
+          },
+          {
+            "delta_brier365": 0.070205508827383,
+            "delta_c_index": -0.2929292929292929,
+            "delta_nll": 0.19368498358461572,
+            "fold": "fold4"
+          }
+        ]
+      },
+      "E4": {
+        "delta_brier365": {
+          "mean": 0.013474574928755154,
+          "n": 5,
+          "std": 0.055679897337086726
+        },
+        "delta_c_index": {
+          "mean": -0.04899654811419516,
+          "n": 5,
+          "std": 0.20831423612964473
+        },
+        "delta_nll": {
+          "mean": 0.05341450622195314,
+          "n": 5,
+          "std": 0.0618380828698264
+        },
+        "direction_counts": {
+          "brier365_improved": 2,
+          "c_index_improved": 3,
+          "folds": 5,
+          "nll_improved": 0
+        },
+        "folds": [
+          {
+            "delta_brier365": -0.07005338638222426,
+            "delta_c_index": 0.13148148148148153,
+            "delta_nll": 0.002372760328386736,
+            "fold": "fold0"
+          },
+          {
+            "delta_brier365": 0.046421152657851766,
+            "delta_c_index": -0.31652661064425763,
+            "delta_nll": 0.14397267525705182,
+            "fold": "fold1"
+          },
+          {
+            "delta_brier365": -0.001748225968445205,
+            "delta_c_index": 0.06944444444444431,
+            "delta_nll": 0.0034854970251525508,
+            "fold": "fold2"
+          },
+          {
+            "delta_brier365": 0.07753575533219989,
+            "delta_c_index": -0.2303921568627451,
+            "delta_nll": 0.08978676815523645,
+            "fold": "fold3"
+          },
+          {
+            "delta_brier365": 0.015217579004393578,
+            "delta_c_index": 0.1010101010101011,
+            "delta_nll": 0.02745483034393814,
+            "fold": "fold4"
+          }
+        ]
+      },
+      "E5": {
+        "delta_brier365": {
+          "mean": -0.00841835751225739,
+          "n": 5,
+          "std": 0.023193188915213745
+        },
+        "delta_c_index": {
+          "mean": 0.061134736722972025,
+          "n": 5,
+          "std": 0.06979544929104109
+        },
+        "delta_nll": {
+          "mean": -0.011201228855785849,
+          "n": 5,
+          "std": 0.015004463455733523
+        },
+        "direction_counts": {
+          "brier365_improved": 2,
+          "c_index_improved": 4,
+          "folds": 5,
+          "nll_improved": 4
+        },
+        "folds": [
+          {
+            "delta_brier365": -0.04271973878275226,
+            "delta_c_index": 0.14629629629629626,
+            "delta_nll": -0.028013196761020875,
+            "fold": "fold0"
+          },
+          {
+            "delta_brier365": 0.0017012286166581958,
+            "delta_c_index": 0.011204481792717047,
+            "delta_nll": 0.0028101468334589264,
+            "fold": "fold1"
+          },
+          {
+            "delta_brier365": 0.013130579745596227,
+            "delta_c_index": 0.04166666666666663,
+            "delta_nll": -0.0020952625945209746,
+            "fold": "fold2"
+          },
+          {
+            "delta_brier365": 0.007126258251578199,
+            "delta_c_index": -0.014705882352941124,
+            "delta_nll": -0.0017289943271965313,
+            "fold": "fold3"
+          },
+          {
+            "delta_brier365": -0.021330115392367316,
+            "delta_c_index": 0.12121212121212133,
+            "delta_nll": -0.026978837429649793,
+            "fold": "fold4"
+          }
+        ]
+      }
+    }
+  },
+  "tasks": {
+    "E0/fold0/seed17": {
+      "experiment": "E0",
+      "extras": {},
+      "fold": 0,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 90,
+          "reason": null,
+          "value": 0.5722222222222222
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.16153278536878296
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.8483118310337887
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 13,
+        "final_train_nll": 2.798764028559931,
+        "final_val_nll": 2.936234896231274,
+        "generalization_gap_at_best": 0.026673863222364425,
+        "generalization_gap_final": 0.13747086767134276,
+        "train_nll_at_best": 2.8328196838550608,
+        "val_nll_at_best": 2.859493547077425
+      }
+    },
+    "E0/fold0/seed29": {
+      "experiment": "E0",
+      "extras": {},
+      "fold": 0,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 90,
+          "reason": null,
+          "value": 0.5611111111111111
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.18660447816813502
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.8609752401092554
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 16,
+        "final_train_nll": 2.758906879196169,
+        "final_val_nll": 2.9286071423108235,
+        "generalization_gap_at_best": 0.01633300567173901,
+        "generalization_gap_final": 0.1697002631146547,
+        "train_nll_at_best": 2.846581084945857,
+        "val_nll_at_best": 2.862914090617596
+      }
+    },
+    "E0/fold0/seed7": {
+      "experiment": "E0",
+      "extras": {},
+      "fold": 0,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 90,
+          "reason": null,
+          "value": 0.55
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.18810168159698396
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.8211094298330135
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 21,
+        "final_train_nll": 2.7533200809446536,
+        "final_val_nll": 2.963717233134566,
+        "generalization_gap_at_best": 0.015096785565459125,
+        "generalization_gap_final": 0.21039715218991217,
+        "train_nll_at_best": 2.837089804545831,
+        "val_nll_at_best": 2.85218659011129
+      }
+    },
+    "E0/fold1/seed17": {
+      "experiment": "E0",
+      "extras": {},
+      "fold": 1,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 119,
+          "reason": null,
+          "value": 0.7142857142857143
+        },
+        "censored": 14,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.20538902777774204
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.0921216109767555
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 4,
+        "final_train_nll": 2.7857365767858355,
+        "final_val_nll": 3.0436282141255107,
+        "generalization_gap_at_best": 0.011697460405727611,
+        "generalization_gap_final": 0.25789163733967513,
+        "train_nll_at_best": 2.9393700844906827,
+        "val_nll_at_best": 2.9510675448964103
+      }
+    },
+    "E0/fold1/seed29": {
+      "experiment": "E0",
+      "extras": {},
+      "fold": 1,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 119,
+          "reason": null,
+          "value": 0.6386554621848739
+        },
+        "censored": 14,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.21526474077983726
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.086884728902951
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 6,
+        "final_train_nll": 2.7787259142550442,
+        "final_val_nll": 3.0183278649014333,
+        "generalization_gap_at_best": 0.07629858988115679,
+        "generalization_gap_final": 0.23960195064638912,
+        "train_nll_at_best": 2.887291079781713,
+        "val_nll_at_best": 2.96358966966287
+      }
+    },
+    "E0/fold1/seed7": {
+      "experiment": "E0",
+      "extras": {},
+      "fold": 1,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 119,
+          "reason": null,
+          "value": 0.6722689075630253
+        },
+        "censored": 14,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.20509178647468296
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.0853194452263413
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 5,
+        "final_train_nll": 2.7854746196863087,
+        "final_val_nll": 3.097452598668953,
+        "generalization_gap_at_best": 0.04953625970489828,
+        "generalization_gap_final": 0.31197797898264445,
+        "train_nll_at_best": 2.902212246774422,
+        "val_nll_at_best": 2.95174850647932
+      }
+    },
+    "E0/fold2/seed17": {
+      "experiment": "E0",
+      "extras": {},
+      "fold": 2,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 96,
+          "reason": null,
+          "value": 0.5208333333333334
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.2553059131998522
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.9822015410661695
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 4,
+        "final_train_nll": 2.8207429791061003,
+        "final_val_nll": 2.9754795660698186,
+        "generalization_gap_at_best": -0.04287440042073465,
+        "generalization_gap_final": 0.15473658696371828,
+        "train_nll_at_best": 2.961842052609933,
+        "val_nll_at_best": 2.9189676521891985
+      }
+    },
+    "E0/fold2/seed29": {
+      "experiment": "E0",
+      "extras": {},
+      "fold": 2,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 96,
+          "reason": null,
+          "value": 0.5208333333333334
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.2559126411804168
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.979338828474283
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 3,
+        "final_train_nll": 2.839000444225182,
+        "final_val_nll": 2.981939297755854,
+        "generalization_gap_at_best": -0.0940838471871448,
+        "generalization_gap_final": 0.14293885353067193,
+        "train_nll_at_best": 3.004106988474578,
+        "val_nll_at_best": 2.910023141287433
+      }
+    },
+    "E0/fold2/seed7": {
+      "experiment": "E0",
+      "extras": {},
+      "fold": 2,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 96,
+          "reason": null,
+          "value": 0.53125
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.293257428868382
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.0194654137268664
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 6,
+        "final_train_nll": 2.805455820581067,
+        "final_val_nll": 3.0147359267385907,
+        "generalization_gap_at_best": 0.0277842121844869,
+        "generalization_gap_final": 0.2092801061575238,
+        "train_nll_at_best": 2.8962453903986582,
+        "val_nll_at_best": 2.924029602583145
+      }
+    },
+    "E0/fold3/seed17": {
+      "experiment": "E0",
+      "extras": {},
+      "fold": 3,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 102,
+          "reason": null,
+          "value": 0.6813725490196079
+        },
+        "censored": 13,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.1689359594334794
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.182465092992061
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 9,
+        "final_train_nll": 2.7455490413063193,
+        "final_val_nll": 3.2539676624946727,
+        "generalization_gap_at_best": 0.2639845540727923,
+        "generalization_gap_final": 0.5084186211883535,
+        "train_nll_at_best": 2.8115801651446386,
+        "val_nll_at_best": 3.075564719217431
+      }
+    },
+    "E0/fold3/seed29": {
+      "experiment": "E0",
+      "extras": {},
+      "fold": 3,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 102,
+          "reason": null,
+          "value": 0.6127450980392157
+        },
+        "censored": 13,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.1906615831170344
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.1786011950074076
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 5,
+        "final_train_nll": 2.7661532637574515,
+        "final_val_nll": 3.1805155304862844,
+        "generalization_gap_at_best": 0.17480511493076012,
+        "generalization_gap_final": 0.4143622667288329,
+        "train_nll_at_best": 2.876427956109033,
+        "val_nll_at_best": 3.051233071039793
+      }
+    },
+    "E0/fold3/seed7": {
+      "experiment": "E0",
+      "extras": {},
+      "fold": 3,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 102,
+          "reason": null,
+          "value": 0.6715686274509803
+        },
+        "censored": 13,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.16072010969254838
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.1709577150953314
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 8,
+        "final_train_nll": 2.749361363914468,
+        "final_val_nll": 3.153950208268555,
+        "generalization_gap_at_best": 0.23669950041908594,
+        "generalization_gap_final": 0.40458884435408704,
+        "train_nll_at_best": 2.837526240243102,
+        "val_nll_at_best": 3.074225740662188
+      }
+    },
+    "E0/fold4/seed17": {
+      "experiment": "E0",
+      "extras": {},
+      "fold": 4,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 99,
+          "reason": null,
+          "value": 0.5858585858585859
+        },
+        "censored": 15,
+        "events": 9,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.22066789910337445
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.8466354963990548
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 4,
+        "final_train_nll": 2.779037996122736,
+        "final_val_nll": 3.2206198485446036,
+        "generalization_gap_at_best": 0.04013459953556442,
+        "generalization_gap_final": 0.44158185242186754,
+        "train_nll_at_best": 2.9437913198412096,
+        "val_nll_at_best": 2.983925919376774
+      }
+    },
+    "E0/fold4/seed29": {
+      "experiment": "E0",
+      "extras": {},
+      "fold": 4,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 99,
+          "reason": null,
+          "value": 0.6161616161616161
+        },
+        "censored": 15,
+        "events": 9,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.2392608392352551
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.903172194957733
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 3,
+        "final_train_nll": 2.7726821088522198,
+        "final_val_nll": 3.1774918763839453,
+        "generalization_gap_at_best": -0.014731930132584115,
+        "generalization_gap_final": 0.4048097675317255,
+        "train_nll_at_best": 2.9913192067269336,
+        "val_nll_at_best": 2.9765872765943495
+      }
+    },
+    "E0/fold4/seed7": {
+      "experiment": "E0",
+      "extras": {},
+      "fold": 4,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 99,
+          "reason": null,
+          "value": 0.6565656565656566
+        },
+        "censored": 15,
+        "events": 9,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.2262326528281111
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.888895216708382
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 2,
+        "final_train_nll": 2.7854908948914776,
+        "final_val_nll": 3.195412429356081,
+        "generalization_gap_at_best": -0.03698492141320342,
+        "generalization_gap_final": 0.40992153446460344,
+        "train_nll_at_best": 3.017140390188815,
+        "val_nll_at_best": 2.9801554687756115
+      }
+    },
+    "E1/fold0/seed17": {
+      "experiment": "E1",
+      "extras": {},
+      "fold": 0,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 90,
+          "reason": null,
+          "value": 0.6555555555555556
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.17143044187104894
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.0787850400060415
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 4,
+        "final_train_nll": 2.246299897998472,
+        "final_val_nll": 3.629528288668507,
+        "generalization_gap_at_best": 0.4461465590551632,
+        "generalization_gap_final": 1.383228390670035,
+        "train_nll_at_best": 2.7207063474827358,
+        "val_nll_at_best": 3.166852906537899
+      }
+    },
+    "E1/fold0/seed29": {
+      "experiment": "E1",
+      "extras": {},
+      "fold": 0,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 90,
+          "reason": null,
+          "value": 0.6555555555555556
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.24869266095352033
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.1252490277588367
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 2,
+        "final_train_nll": 2.2860578872620088,
+        "final_val_nll": 3.6189150383409485,
+        "generalization_gap_at_best": 0.2849126324138753,
+        "generalization_gap_final": 1.3328571510789398,
+        "train_nll_at_best": 2.8941318172380543,
+        "val_nll_at_best": 3.1790444496519297
+      }
+    },
+    "E1/fold0/seed7": {
+      "experiment": "E1",
+      "extras": {},
+      "fold": 0,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 90,
+          "reason": null,
+          "value": 0.6333333333333333
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.2466950748075103
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.191032793074846
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 3,
+        "final_train_nll": 2.2624399010880762,
+        "final_val_nll": 3.664821790129784,
+        "generalization_gap_at_best": 0.411290358520378,
+        "generalization_gap_final": 1.402381889041708,
+        "train_nll_at_best": 2.8063177035520686,
+        "val_nll_at_best": 3.2176080620724465
+      }
+    },
+    "E1/fold1/seed17": {
+      "experiment": "E1",
+      "extras": {},
+      "fold": 1,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 119,
+          "reason": null,
+          "value": 0.35294117647058826
+        },
+        "censored": 14,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.2828498686522133
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.327155162394047
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.284726316388893,
+        "final_val_nll": 4.325320155131525,
+        "generalization_gap_at_best": 0.09212311008917906,
+        "generalization_gap_final": 2.040593838742632,
+        "train_nll_at_best": 3.059239341412192,
+        "val_nll_at_best": 3.151362451501371
+      }
+    },
+    "E1/fold1/seed29": {
+      "experiment": "E1",
+      "extras": {},
+      "fold": 1,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 119,
+          "reason": null,
+          "value": 0.3949579831932773
+        },
+        "censored": 14,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.2667737692860588
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.354513831883669
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.2915398115501904,
+        "final_val_nll": 4.1621964583512705,
+        "generalization_gap_at_best": 0.0553839850084783,
+        "generalization_gap_final": 1.8706566468010801,
+        "train_nll_at_best": 3.0757744954008204,
+        "val_nll_at_best": 3.1311584804092987
+      }
+    },
+    "E1/fold1/seed7": {
+      "experiment": "E1",
+      "extras": {},
+      "fold": 1,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 119,
+          "reason": null,
+          "value": 0.4369747899159664
+        },
+        "censored": 14,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.2464041293380108
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.3004418727755547
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.2920911213449133,
+        "final_val_nll": 4.305580432678969,
+        "generalization_gap_at_best": 0.06871911195925895,
+        "generalization_gap_final": 2.0134893113340557,
+        "train_nll_at_best": 3.0728959110199043,
+        "val_nll_at_best": 3.1416150229791633
+      }
+    },
+    "E1/fold2/seed17": {
+      "experiment": "E1",
+      "extras": {},
+      "fold": 2,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 96,
+          "reason": null,
+          "value": 0.5729166666666666
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.30175443924085854
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.1214977260679007
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.339308051509671,
+        "final_val_nll": 3.675036563394362,
+        "generalization_gap_at_best": -0.055669821426057364,
+        "generalization_gap_final": 1.3357285118846907,
+        "train_nll_at_best": 3.109264388519264,
+        "val_nll_at_best": 3.0535945670932065
+      }
+    },
+    "E1/fold2/seed29": {
+      "experiment": "E1",
+      "extras": {},
+      "fold": 2,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 96,
+          "reason": null,
+          "value": 0.6145833333333334
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.2966739735484295
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.084679883271456
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.3331223065556155,
+        "final_val_nll": 3.623426764101404,
+        "generalization_gap_at_best": -0.050722808337939185,
+        "generalization_gap_final": 1.2903044575457887,
+        "train_nll_at_best": 3.1178067545420896,
+        "val_nll_at_best": 3.0670839462041504
+      }
+    },
+    "E1/fold2/seed7": {
+      "experiment": "E1",
+      "extras": {},
+      "fold": 2,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 96,
+          "reason": null,
+          "value": 0.6354166666666666
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.3050433308581806
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.0203281543403864
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.3319978949133424,
+        "final_val_nll": 3.7807828647165564,
+        "generalization_gap_at_best": -0.034324319719323704,
+        "generalization_gap_final": 1.448784969803214,
+        "train_nll_at_best": 3.1140743189706894,
+        "val_nll_at_best": 3.0797499992513657
+      }
+    },
+    "E1/fold3/seed17": {
+      "experiment": "E1",
+      "extras": {},
+      "fold": 3,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 102,
+          "reason": null,
+          "value": 0.38235294117647056
+        },
+        "censored": 13,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.28912966986790173
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.3092443578643724
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.2692698012171313,
+        "final_val_nll": 3.7254169096383687,
+        "generalization_gap_at_best": 0.17358147141112878,
+        "generalization_gap_final": 1.4561471084212374,
+        "train_nll_at_best": 3.0617608628854818,
+        "val_nll_at_best": 3.2353423342966106
+      }
+    },
+    "E1/fold3/seed29": {
+      "experiment": "E1",
+      "extras": {},
+      "fold": 3,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 102,
+          "reason": null,
+          "value": 0.4117647058823529
+        },
+        "censored": 13,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.31980972449610756
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.323272516562914
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 2,
+        "final_train_nll": 2.2491181925680124,
+        "final_val_nll": 3.8131452475728493,
+        "generalization_gap_at_best": 0.3797514319229265,
+        "generalization_gap_final": 1.564027055004837,
+        "train_nll_at_best": 2.8682798962771225,
+        "val_nll_at_best": 3.248031328200049
+      }
+    },
+    "E1/fold3/seed7": {
+      "experiment": "E1",
+      "extras": {},
+      "fold": 3,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 102,
+          "reason": null,
+          "value": 0.4117647058823529
+        },
+        "censored": 13,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.2941259269524836
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.3329050968556353
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 2,
+        "final_train_nll": 2.2526618710081348,
+        "final_val_nll": 3.8296417959673485,
+        "generalization_gap_at_best": 0.3756096753368401,
+        "generalization_gap_final": 1.5769799249592138,
+        "train_nll_at_best": 2.869265050605981,
+        "val_nll_at_best": 3.2448747259428212
+      }
+    },
+    "E1/fold4/seed17": {
+      "experiment": "E1",
+      "extras": {},
+      "fold": 4,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 99,
+          "reason": null,
+          "value": 0.7070707070707071
+        },
+        "censored": 15,
+        "events": 9,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.24480692226349635
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.0080216514567533
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.3441060816622916,
+        "final_val_nll": 3.446410360081579,
+        "generalization_gap_at_best": -0.15911666318925155,
+        "generalization_gap_final": 1.1023042784192874,
+        "train_nll_at_best": 3.1266604850190545,
+        "val_nll_at_best": 2.967543821829803
+      }
+    },
+    "E1/fold4/seed29": {
+      "experiment": "E1",
+      "extras": {},
+      "fold": 4,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 99,
+          "reason": null,
+          "value": 0.6565656565656566
+        },
+        "censored": 15,
+        "events": 9,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.27264916180105025
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.0224805679172277
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.349679432808904,
+        "final_val_nll": 3.58700579059101,
+        "generalization_gap_at_best": -0.11563419120126506,
+        "generalization_gap_final": 1.237326357782106,
+        "train_nll_at_best": 3.126661725565825,
+        "val_nll_at_best": 3.01102753436456
+      }
+    },
+    "E1/fold4/seed7": {
+      "experiment": "E1",
+      "extras": {},
+      "fold": 4,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 99,
+          "reason": null,
+          "value": 0.5454545454545454
+        },
+        "censored": 15,
+        "events": 9,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.2650397985786504
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.018321208655834
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.3443705791645373,
+        "final_val_nll": 3.5377158706301106,
+        "generalization_gap_at_best": -0.12850574389035385,
+        "generalization_gap_final": 1.1933452914655733,
+        "train_nll_at_best": 3.128493306388305,
+        "val_nll_at_best": 2.9999875624979513
+      }
+    },
+    "E2/fold0/seed17": {
+      "experiment": "E2",
+      "extras": {},
+      "fold": 0,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 90,
+          "reason": null,
+          "value": 0.6666666666666666
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.1662553420718296
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.066594016868621
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 4,
+        "final_train_nll": 2.2342351982877764,
+        "final_val_nll": 3.5269051160085634,
+        "generalization_gap_at_best": 0.4508630470666599,
+        "generalization_gap_final": 1.292669917720787,
+        "train_nll_at_best": 2.688552955610647,
+        "val_nll_at_best": 3.139416002677307
+      }
+    },
+    "E2/fold0/seed29": {
+      "experiment": "E2",
+      "extras": {},
+      "fold": 0,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 90,
+          "reason": null,
+          "value": 0.6777777777777778
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.18740041583266154
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.1180414171889423
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 5,
+        "final_train_nll": 2.2257568882819707,
+        "final_val_nll": 3.5863509526691075,
+        "generalization_gap_at_best": 0.4927069806888871,
+        "generalization_gap_final": 1.3605940643871368,
+        "train_nll_at_best": 2.654802054516609,
+        "val_nll_at_best": 3.147509035205496
+      }
+    },
+    "E2/fold0/seed7": {
+      "experiment": "E2",
+      "extras": {},
+      "fold": 0,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 90,
+          "reason": null,
+          "value": 0.6333333333333333
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.22076571386968588
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.0778698083758353
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 3,
+        "final_train_nll": 2.239363982812405,
+        "final_val_nll": 3.419570563523462,
+        "generalization_gap_at_best": 0.34846325451152316,
+        "generalization_gap_final": 1.180206580711057,
+        "train_nll_at_best": 2.7821712009543864,
+        "val_nll_at_best": 3.1306344554659096
+      }
+    },
+    "E2/fold1/seed17": {
+      "experiment": "E2",
+      "extras": {},
+      "fold": 1,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 119,
+          "reason": null,
+          "value": 0.33613445378151263
+        },
+        "censored": 14,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.28573469375826827
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.331798550710082
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.2572728640895736,
+        "final_val_nll": 4.220681830570914,
+        "generalization_gap_at_best": 0.11334051033590287,
+        "generalization_gap_final": 1.9634089664813406,
+        "train_nll_at_best": 3.0466840883570065,
+        "val_nll_at_best": 3.1600245986929094
+      }
+    },
+    "E2/fold1/seed29": {
+      "experiment": "E2",
+      "extras": {},
+      "fold": 1,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 119,
+          "reason": null,
+          "value": 0.3697478991596639
+        },
+        "censored": 14,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.25715284121478565
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.330473853871226
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.261244729526763,
+        "final_val_nll": 4.21713938838427,
+        "generalization_gap_at_best": 0.06061310681616838,
+        "generalization_gap_final": 1.955894658857507,
+        "train_nll_at_best": 3.066051545944732,
+        "val_nll_at_best": 3.1266646527609003
+      }
+    },
+    "E2/fold1/seed7": {
+      "experiment": "E2",
+      "extras": {},
+      "fold": 1,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 119,
+          "reason": null,
+          "value": 0.4369747899159664
+        },
+        "censored": 14,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.26104798364590664
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.2801072812080383
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.260120923441312,
+        "final_val_nll": 4.2666807072952,
+        "generalization_gap_at_best": 0.05326654788380836,
+        "generalization_gap_final": 2.0065597838538882,
+        "train_nll_at_best": 3.0668928065107477,
+        "val_nll_at_best": 3.120159354394556
+      }
+    },
+    "E2/fold2/seed17": {
+      "experiment": "E2",
+      "extras": {},
+      "fold": 2,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 96,
+          "reason": null,
+          "value": 0.5729166666666666
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.308026090794263
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.107108948528767
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.3005779770740777,
+        "final_val_nll": 3.6429784597599912,
+        "generalization_gap_at_best": -0.07360053068600081,
+        "generalization_gap_final": 1.3424004826859135,
+        "train_nll_at_best": 3.1018298801144057,
+        "val_nll_at_best": 3.028229349428405
+      }
+    },
+    "E2/fold2/seed29": {
+      "experiment": "E2",
+      "extras": {},
+      "fold": 2,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 96,
+          "reason": null,
+          "value": 0.5833333333333334
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.32273863733798785
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.0846027367934585
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 3,
+        "final_train_nll": 2.2794256314930754,
+        "final_val_nll": 3.7393599850067147,
+        "generalization_gap_at_best": 0.23863311522001807,
+        "generalization_gap_final": 1.4599343535136393,
+        "train_nll_at_best": 2.828526056809906,
+        "val_nll_at_best": 3.0671591720299243
+      }
+    },
+    "E2/fold2/seed7": {
+      "experiment": "E2",
+      "extras": {},
+      "fold": 2,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 96,
+          "reason": null,
+          "value": 0.6354166666666666
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.28754517858893275
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.971828695386648
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.294114966597875,
+        "final_val_nll": 3.7045921876187027,
+        "generalization_gap_at_best": -0.060127208803288035,
+        "generalization_gap_final": 1.4104772210208276,
+        "train_nll_at_best": 3.0961270961171374,
+        "val_nll_at_best": 3.0359998873138494
+      }
+    },
+    "E2/fold3/seed17": {
+      "experiment": "E2",
+      "extras": {},
+      "fold": 3,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 102,
+          "reason": null,
+          "value": 0.3627450980392157
+        },
+        "censored": 13,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.29547214953012924
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.313314520094233
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.231160319837682,
+        "final_val_nll": 3.8266341059750673,
+        "generalization_gap_at_best": 0.18805381706063606,
+        "generalization_gap_final": 1.595473786137385,
+        "train_nll_at_best": 3.0398040417617946,
+        "val_nll_at_best": 3.2278578588224307
+      }
+    },
+    "E2/fold3/seed29": {
+      "experiment": "E2",
+      "extras": {},
+      "fold": 3,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 102,
+          "reason": null,
+          "value": 0.4411764705882353
+        },
+        "censored": 13,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.28155027229425134
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.449668247369118
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.2273874839157477,
+        "final_val_nll": 3.954790931749704,
+        "generalization_gap_at_best": 0.2449979733821861,
+        "generalization_gap_final": 1.7274034478339564,
+        "train_nll_at_best": 3.04315041833555,
+        "val_nll_at_best": 3.288148391717736
+      }
+    },
+    "E2/fold3/seed7": {
+      "experiment": "E2",
+      "extras": {},
+      "fold": 3,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 102,
+          "reason": null,
+          "value": 0.43137254901960786
+        },
+        "censored": 13,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.29182666727628265
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.285296104848385
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 2,
+        "final_train_nll": 2.2170987093966614,
+        "final_val_nll": 3.8785401034935276,
+        "generalization_gap_at_best": 0.38749395745481907,
+        "generalization_gap_final": 1.6614413940968662,
+        "train_nll_at_best": 2.852628371139614,
+        "val_nll_at_best": 3.240122328594433
+      }
+    },
+    "E2/fold4/seed17": {
+      "experiment": "E2",
+      "extras": {},
+      "fold": 4,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 99,
+          "reason": null,
+          "value": 0.6666666666666666
+        },
+        "censored": 15,
+        "events": 9,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.23681574465789068
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.9693187257895866
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.319565143410189,
+        "final_val_nll": 3.57302524355947,
+        "generalization_gap_at_best": -0.15736943453882102,
+        "generalization_gap_final": 1.2534601001492809,
+        "train_nll_at_best": 3.116694272886064,
+        "val_nll_at_best": 2.959324838347243
+      }
+    },
+    "E2/fold4/seed29": {
+      "experiment": "E2",
+      "extras": {},
+      "fold": 4,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 99,
+          "reason": null,
+          "value": 0.6565656565656566
+        },
+        "censored": 15,
+        "events": 9,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.24990287973383643
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.972667175655564
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.3152179829712667,
+        "final_val_nll": 3.567245739013126,
+        "generalization_gap_at_best": -0.11452278248952563,
+        "generalization_gap_final": 1.2520277560418593,
+        "train_nll_at_best": 3.117643125255956,
+        "val_nll_at_best": 3.0031203427664304
+      }
+    },
+    "E2/fold4/seed7": {
+      "experiment": "E2",
+      "extras": {},
+      "fold": 4,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 99,
+          "reason": null,
+          "value": 0.5353535353535354
+        },
+        "censored": 15,
+        "events": 9,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.28010526257288076
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.0400956453134618
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.3118624501855796,
+        "final_val_nll": 3.5396737440556785,
+        "generalization_gap_at_best": -0.07959917676687356,
+        "generalization_gap_final": 1.227811293870099,
+        "train_nll_at_best": 3.104500049279497,
+        "val_nll_at_best": 3.0249008725126236
+      }
+    },
+    "E3/fold0/seed17": {
+      "experiment": "E3",
+      "extras": {},
+      "fold": 0,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 90,
+          "reason": null,
+          "value": 0.6
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.3100970583306149
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.1651181092858316
+      },
+      "seed": 17,
+      "shuffle": {
+        "scope": "split_local_patient_derangement",
+        "train_mapping_sha256": "64e0b0c4dd5424bdbf37c9653dbf55d817f35d925b6e47d88f9dab62639443b9",
+        "validation_mapping_sha256": "39e956fc755e6ca98a242ecc68785aaed5a20aca1815abbfe1714b2fb72e9793"
+      },
+      "training": {
+        "best_epoch": 3,
+        "final_train_nll": 2.31203735795812,
+        "final_val_nll": 3.259869908909992,
+        "generalization_gap_at_best": 0.242121524427366,
+        "generalization_gap_final": 0.9478325509518717,
+        "train_nll_at_best": 2.8245258500443984,
+        "val_nll_at_best": 3.0666473744717644
+      }
+    },
+    "E3/fold0/seed29": {
+      "experiment": "E3",
+      "extras": {},
+      "fold": 0,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 90,
+          "reason": null,
+          "value": 0.5222222222222223
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.3200826912566452
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.2164535096287725
+      },
+      "seed": 29,
+      "shuffle": {
+        "scope": "split_local_patient_derangement",
+        "train_mapping_sha256": "64e0b0c4dd5424bdbf37c9653dbf55d817f35d925b6e47d88f9dab62639443b9",
+        "validation_mapping_sha256": "39e956fc755e6ca98a242ecc68785aaed5a20aca1815abbfe1714b2fb72e9793"
+      },
+      "training": {
+        "best_epoch": 3,
+        "final_train_nll": 2.3118033494876413,
+        "final_val_nll": 3.3693290951031076,
+        "generalization_gap_at_best": 0.27996084754656225,
+        "generalization_gap_final": 1.0575257456154663,
+        "train_nll_at_best": 2.825909471595958,
+        "val_nll_at_best": 3.1058703191425203
+      }
+    },
+    "E3/fold0/seed7": {
+      "experiment": "E3",
+      "extras": {},
+      "fold": 0,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 90,
+          "reason": null,
+          "value": 0.6777777777777778
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.2904507222696138
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.1711007514595986
+      },
+      "seed": 7,
+      "shuffle": {
+        "scope": "split_local_patient_derangement",
+        "train_mapping_sha256": "64e0b0c4dd5424bdbf37c9653dbf55d817f35d925b6e47d88f9dab62639443b9",
+        "validation_mapping_sha256": "39e956fc755e6ca98a242ecc68785aaed5a20aca1815abbfe1714b2fb72e9793"
+      },
+      "training": {
+        "best_epoch": 2,
+        "final_train_nll": 2.3255985762613967,
+        "final_val_nll": 3.2839396559166087,
+        "generalization_gap_at_best": 0.16296613884537337,
+        "generalization_gap_final": 0.9583410796552121,
+        "train_nll_at_best": 2.9254910416181437,
+        "val_nll_at_best": 3.088457180463517
+      }
+    },
+    "E3/fold1/seed17": {
+      "experiment": "E3",
+      "extras": {},
+      "fold": 1,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 119,
+          "reason": null,
+          "value": 0.46218487394957986
+        },
+        "censored": 14,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.23763359686623048
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.277598979920149
+      },
+      "seed": 17,
+      "shuffle": {
+        "scope": "split_local_patient_derangement",
+        "train_mapping_sha256": "f4c9fdaf0dd8c932d814a4c30867e353b1767bc2ac89558b995dae33c292a91c",
+        "validation_mapping_sha256": "b924f6c09f37f959e03b35afa901c03d57fe5df490a3ee8962dca71d3c88a7a9"
+      },
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.316917559913584,
+        "final_val_nll": 3.8438106977916453,
+        "generalization_gap_at_best": 0.03737214108916431,
+        "generalization_gap_final": 1.5268931378780612,
+        "train_nll_at_best": 3.086873116317251,
+        "val_nll_at_best": 3.1242452574064155
+      }
+    },
+    "E3/fold1/seed29": {
+      "experiment": "E3",
+      "extras": {},
+      "fold": 1,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 119,
+          "reason": null,
+          "value": 0.3697478991596639
+        },
+        "censored": 14,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.24479978252337461
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.2792973171174524
+      },
+      "seed": 29,
+      "shuffle": {
+        "scope": "split_local_patient_derangement",
+        "train_mapping_sha256": "f4c9fdaf0dd8c932d814a4c30867e353b1767bc2ac89558b995dae33c292a91c",
+        "validation_mapping_sha256": "b924f6c09f37f959e03b35afa901c03d57fe5df490a3ee8962dca71d3c88a7a9"
+      },
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.3265165531835867,
+        "final_val_nll": 4.068042561796472,
+        "generalization_gap_at_best": 0.044631898342790244,
+        "generalization_gap_final": 1.741526008612885,
+        "train_nll_at_best": 3.086725938138005,
+        "val_nll_at_best": 3.1313578364807952
+      }
+    },
+    "E3/fold1/seed7": {
+      "experiment": "E3",
+      "extras": {},
+      "fold": 1,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 119,
+          "reason": null,
+          "value": 0.5294117647058824
+        },
+        "censored": 14,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.23922227250471814
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.2427543303370476
+      },
+      "seed": 7,
+      "shuffle": {
+        "scope": "split_local_patient_derangement",
+        "train_mapping_sha256": "f4c9fdaf0dd8c932d814a4c30867e353b1767bc2ac89558b995dae33c292a91c",
+        "validation_mapping_sha256": "b924f6c09f37f959e03b35afa901c03d57fe5df490a3ee8962dca71d3c88a7a9"
+      },
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.329151803528107,
+        "final_val_nll": 3.8001284866283993,
+        "generalization_gap_at_best": 0.054624199436486,
+        "generalization_gap_final": 1.4709766831002922,
+        "train_nll_at_best": 3.097858590462089,
+        "val_nll_at_best": 3.152482789898575
+      }
+    },
+    "E3/fold2/seed17": {
+      "experiment": "E3",
+      "extras": {},
+      "fold": 2,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 96,
+          "reason": null,
+          "value": 0.53125
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.3008692495540506
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.1149053844064474
+      },
+      "seed": 17,
+      "shuffle": {
+        "scope": "split_local_patient_derangement",
+        "train_mapping_sha256": "43963197f0a8da1e7fa54b41f170072bc944e3f2f2cd05f0ed590bf7816c56c4",
+        "validation_mapping_sha256": "f58558765bbcd20f5400214b3bf3b59cfa28e986d41145e84c4e74426469775a"
+      },
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.3456027409575815,
+        "final_val_nll": 3.608295691969164,
+        "generalization_gap_at_best": -0.04685213919072462,
+        "generalization_gap_final": 1.2626929510115827,
+        "train_nll_at_best": 3.112205357344494,
+        "val_nll_at_best": 3.0653532181537693
+      }
+    },
+    "E3/fold2/seed29": {
+      "experiment": "E3",
+      "extras": {},
+      "fold": 2,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 96,
+          "reason": null,
+          "value": 0.3229166666666667
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.28673835184927177
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.1022202011197804
+      },
+      "seed": 29,
+      "shuffle": {
+        "scope": "split_local_patient_derangement",
+        "train_mapping_sha256": "43963197f0a8da1e7fa54b41f170072bc944e3f2f2cd05f0ed590bf7816c56c4",
+        "validation_mapping_sha256": "f58558765bbcd20f5400214b3bf3b59cfa28e986d41145e84c4e74426469775a"
+      },
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.3399715540414494,
+        "final_val_nll": 3.512186536091621,
+        "generalization_gap_at_best": -0.05065115188837188,
+        "generalization_gap_final": 1.1722149820501717,
+        "train_nll_at_best": 3.1124379334786365,
+        "val_nll_at_best": 3.0617867815902646
+      }
+    },
+    "E3/fold2/seed7": {
+      "experiment": "E3",
+      "extras": {},
+      "fold": 2,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 96,
+          "reason": null,
+          "value": 0.4375
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.2899657291833823
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.051733663920313
+      },
+      "seed": 7,
+      "shuffle": {
+        "scope": "split_local_patient_derangement",
+        "train_mapping_sha256": "43963197f0a8da1e7fa54b41f170072bc944e3f2f2cd05f0ed590bf7816c56c4",
+        "validation_mapping_sha256": "f58558765bbcd20f5400214b3bf3b59cfa28e986d41145e84c4e74426469775a"
+      },
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.3296095181548657,
+        "final_val_nll": 3.6445913136716093,
+        "generalization_gap_at_best": -0.06111563044451351,
+        "generalization_gap_final": 1.3149817955167435,
+        "train_nll_at_best": 3.0906253066429192,
+        "val_nll_at_best": 3.0295096761984057
+      }
+    },
+    "E3/fold3/seed17": {
+      "experiment": "E3",
+      "extras": {},
+      "fold": 3,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 102,
+          "reason": null,
+          "value": 0.47058823529411764
+        },
+        "censored": 13,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.20378271972112075
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.2737969800703772
+      },
+      "seed": 17,
+      "shuffle": {
+        "scope": "split_local_patient_derangement",
+        "train_mapping_sha256": "8468c9311efa3a91fe022b6d968f7276047c39d96fe750dad9541fa9c2a80a6b",
+        "validation_mapping_sha256": "4262289b4841e318853730598537aab1b9238c9b54ce26db520b4508c581c363"
+      },
+      "training": {
+        "best_epoch": 2,
+        "final_train_nll": 2.265025979215099,
+        "final_val_nll": 3.964553715207032,
+        "generalization_gap_at_best": 0.29708006517792906,
+        "generalization_gap_final": 1.699527735991933,
+        "train_nll_at_best": 2.83498530522022,
+        "val_nll_at_best": 3.132065370398149
+      }
+    },
+    "E3/fold3/seed29": {
+      "experiment": "E3",
+      "extras": {},
+      "fold": 3,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 102,
+          "reason": null,
+          "value": 0.5
+        },
+        "censored": 13,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.19687088901546734
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.3311574678324782
+      },
+      "seed": 29,
+      "shuffle": {
+        "scope": "split_local_patient_derangement",
+        "train_mapping_sha256": "8468c9311efa3a91fe022b6d968f7276047c39d96fe750dad9541fa9c2a80a6b",
+        "validation_mapping_sha256": "4262289b4841e318853730598537aab1b9238c9b54ce26db520b4508c581c363"
+      },
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.2844768386439385,
+        "final_val_nll": 3.8483886580312787,
+        "generalization_gap_at_best": 0.058802303258232325,
+        "generalization_gap_final": 1.5639118193873403,
+        "train_nll_at_best": 3.057279426627436,
+        "val_nll_at_best": 3.1160817298856682
+      }
+    },
+    "E3/fold3/seed7": {
+      "experiment": "E3",
+      "extras": {},
+      "fold": 3,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 102,
+          "reason": null,
+          "value": 0.5
+        },
+        "censored": 13,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.19504845684785968
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.2691110535670305
+      },
+      "seed": 7,
+      "shuffle": {
+        "scope": "split_local_patient_derangement",
+        "train_mapping_sha256": "8468c9311efa3a91fe022b6d968f7276047c39d96fe750dad9541fa9c2a80a6b",
+        "validation_mapping_sha256": "4262289b4841e318853730598537aab1b9238c9b54ce26db520b4508c581c363"
+      },
+      "training": {
+        "best_epoch": 2,
+        "final_train_nll": 2.2656641167463984,
+        "final_val_nll": 3.787403462831042,
+        "generalization_gap_at_best": 0.2612440007243797,
+        "generalization_gap_final": 1.5217393460846433,
+        "train_nll_at_best": 2.8610319032048577,
+        "val_nll_at_best": 3.1222759039292374
+      }
+    },
+    "E3/fold4/seed17": {
+      "experiment": "E3",
+      "extras": {},
+      "fold": 4,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 99,
+          "reason": null,
+          "value": 0.32323232323232326
+        },
+        "censored": 15,
+        "events": 9,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.3072389482062861
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.0434734659890332
+      },
+      "seed": 17,
+      "shuffle": {
+        "scope": "split_local_patient_derangement",
+        "train_mapping_sha256": "b60b442a4623ffe3a7803e874abf2f566ae660cd6372de2cb116f656770e4514",
+        "validation_mapping_sha256": "c724e9832caab345f33cd4e24320d2acab956310a64563679dd8d4cbaad66d52"
+      },
+      "training": {
+        "best_epoch": 2,
+        "final_train_nll": 2.346851239085889,
+        "final_val_nll": 3.912117504592041,
+        "generalization_gap_at_best": 0.21161014750101348,
+        "generalization_gap_final": 1.565266265506152,
+        "train_nll_at_best": 2.9407209205247713,
+        "val_nll_at_best": 3.1523310680257848
+      }
+    },
+    "E3/fold4/seed29": {
+      "experiment": "E3",
+      "extras": {},
+      "fold": 4,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 99,
+          "reason": null,
+          "value": 0.35353535353535354
+        },
+        "censored": 15,
+        "events": 9,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.2831760609912745
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.117022189156463
+      },
+      "seed": 29,
+      "shuffle": {
+        "scope": "split_local_patient_derangement",
+        "train_mapping_sha256": "b60b442a4623ffe3a7803e874abf2f566ae660cd6372de2cb116f656770e4514",
+        "validation_mapping_sha256": "c724e9832caab345f33cd4e24320d2acab956310a64563679dd8d4cbaad66d52"
+      },
+      "training": {
+        "best_epoch": 5,
+        "final_train_nll": 2.3213501371304983,
+        "final_val_nll": 3.9029885569020686,
+        "generalization_gap_at_best": 0.4912353786354333,
+        "generalization_gap_final": 1.5816384197715703,
+        "train_nll_at_best": 2.7057356723831605,
+        "val_nll_at_best": 3.196971051018594
+      }
+    },
+    "E3/fold4/seed7": {
+      "experiment": "E3",
+      "extras": {},
+      "fold": 4,
+      "pca": null,
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 99,
+          "reason": null,
+          "value": 0.30303030303030304
+        },
+        "censored": 15,
+        "events": 9,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.30636290845132913
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.0592622036735215
+      },
+      "seed": 7,
+      "shuffle": {
+        "scope": "split_local_patient_derangement",
+        "train_mapping_sha256": "b60b442a4623ffe3a7803e874abf2f566ae660cd6372de2cb116f656770e4514",
+        "validation_mapping_sha256": "c724e9832caab345f33cd4e24320d2acab956310a64563679dd8d4cbaad66d52"
+      },
+      "training": {
+        "best_epoch": 3,
+        "final_train_nll": 2.333730443473014,
+        "final_val_nll": 3.994756301452466,
+        "generalization_gap_at_best": 0.2972450089535781,
+        "generalization_gap_final": 1.661025857979452,
+        "train_nll_at_best": 2.845211318228225,
+        "val_nll_at_best": 3.142456327181803
+      }
+    },
+    "E4/fold0/seed17": {
+      "experiment": "E4",
+      "extras": {},
+      "fold": 0,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9850823283195496,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 272
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 90,
+          "reason": null,
+          "value": 0.6888888888888889
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.10839699331790538
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.8374346510414035
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 14,
+        "final_train_nll": 2.3632723298523715,
+        "final_val_nll": 3.165818894736523,
+        "generalization_gap_at_best": 0.3929874176244281,
+        "generalization_gap_final": 0.8025465648841514,
+        "train_nll_at_best": 2.6116233686376726,
+        "val_nll_at_best": 3.0046107862621008
+      }
+    },
+    "E4/fold0/seed29": {
+      "experiment": "E4",
+      "extras": {},
+      "fold": 0,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9850823283195496,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 272
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 90,
+          "reason": null,
+          "value": 0.7333333333333333
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.11752768930970113
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.8655461915116756
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 14,
+        "final_train_nll": 2.364773860515954,
+        "final_val_nll": 3.161380914253963,
+        "generalization_gap_at_best": 0.3851241324511081,
+        "generalization_gap_final": 0.796607053738009,
+        "train_nll_at_best": 2.625707967050231,
+        "val_nll_at_best": 3.010832099501339
+      }
+    },
+    "E4/fold0/seed7": {
+      "experiment": "E4",
+      "extras": {},
+      "fold": 0,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9850823283195496,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 272
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 90,
+          "reason": null,
+          "value": 0.6555555555555556
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.10015410335962273
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.8345339394081384
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 15,
+        "final_train_nll": 2.349759169391395,
+        "final_val_nll": 3.1932868883786436,
+        "generalization_gap_at_best": 0.4157179517343619,
+        "generalization_gap_final": 0.8435277189872488,
+        "train_nll_at_best": 2.5775571568595748,
+        "val_nll_at_best": 2.9932751085939366
+      }
+    },
+    "E4/fold1/seed17": {
+      "experiment": "E4",
+      "extras": {},
+      "fold": 1,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9840143322944641,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 284
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 119,
+          "reason": null,
+          "value": 0.31932773109243695
+        },
+        "censored": 14,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.26739139514898386
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.2496878274530174
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 4,
+        "final_train_nll": 2.4529353628299835,
+        "final_val_nll": 3.509064120900569,
+        "generalization_gap_at_best": 0.17006156867561284,
+        "generalization_gap_final": 1.0561287580705856,
+        "train_nll_at_best": 2.938212162240459,
+        "val_nll_at_best": 3.1082737309160717
+      }
+    },
+    "E4/fold1/seed29": {
+      "experiment": "E4",
+      "extras": {},
+      "fold": 1,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9840143322944641,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 284
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 119,
+          "reason": null,
+          "value": 0.3277310924369748
+        },
+        "censored": 14,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.25153179606196036
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.216702196225524
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 4,
+        "final_train_nll": 2.4718663323877195,
+        "final_val_nll": 3.4225866919484447,
+        "generalization_gap_at_best": 0.13382851744228086,
+        "generalization_gap_final": 0.9507203595607252,
+        "train_nll_at_best": 2.9333041627971035,
+        "val_nll_at_best": 3.0671326802393843
+      }
+    },
+    "E4/fold1/seed7": {
+      "experiment": "E4",
+      "extras": {},
+      "fold": 1,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9840143322944641,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 284
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 119,
+          "reason": null,
+          "value": 0.42857142857142855
+        },
+        "censored": 14,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.24608582179487343
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.2298537871986626
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 4,
+        "final_train_nll": 2.4593071825338697,
+        "final_val_nll": 3.485546436861174,
+        "generalization_gap_at_best": 0.1344851874312729,
+        "generalization_gap_final": 1.0262392543273045,
+        "train_nll_at_best": 2.9498883597651706,
+        "val_nll_at_best": 3.0843735471964435
+      }
+    },
+    "E4/fold2/seed17": {
+      "experiment": "E4",
+      "extras": {},
+      "fold": 2,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9844118356704712,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 288
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 96,
+          "reason": null,
+          "value": 0.6041666666666666
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.2677001410012638
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.976144730076194
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 5,
+        "final_train_nll": 2.5063429572180542,
+        "final_val_nll": 3.1623719885422523,
+        "generalization_gap_at_best": 0.0344488142048589,
+        "generalization_gap_final": 0.6560290313241981,
+        "train_nll_at_best": 2.933085844177481,
+        "val_nll_at_best": 2.96753465838234
+      }
+    },
+    "E4/fold2/seed29": {
+      "experiment": "E4",
+      "extras": {},
+      "fold": 2,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9844118356704712,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 288
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 96,
+          "reason": null,
+          "value": 0.59375
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.2616505248911898
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.0182671970129014
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 3,
+        "final_train_nll": 2.5547529257840975,
+        "final_val_nll": 3.1338284034445723,
+        "generalization_gap_at_best": -0.0380670572638242,
+        "generalization_gap_final": 0.5790754776604747,
+        "train_nll_at_best": 3.0164020385144927,
+        "val_nll_at_best": 2.9783349812506685
+      }
+    },
+    "E4/fold2/seed7": {
+      "experiment": "E4",
+      "extras": {},
+      "fold": 2,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9844118356704712,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 288
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 96,
+          "reason": null,
+          "value": 0.5833333333333334
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.2698806394508617
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.9970503472536802
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 4,
+        "final_train_nll": 2.5252941469892245,
+        "final_val_nll": 3.119055455071137,
+        "generalization_gap_at_best": 0.014115752539428872,
+        "generalization_gap_final": 0.5937613080819126,
+        "train_nll_at_best": 2.9652036112843074,
+        "val_nll_at_best": 2.9793193638237363
+      }
+    },
+    "E4/fold3/seed17": {
+      "experiment": "E4",
+      "extras": {},
+      "fold": 3,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9836223721504211,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 298
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 102,
+          "reason": null,
+          "value": 0.43137254901960786
+        },
+        "censored": 13,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.2440691358434256
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.2590418361360207
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 4,
+        "final_train_nll": 2.4706837216581095,
+        "final_val_nll": 3.368118321175642,
+        "generalization_gap_at_best": 0.28012539241428014,
+        "generalization_gap_final": 0.8974345995175326,
+        "train_nll_at_best": 2.902879595500879,
+        "val_nll_at_best": 3.183004987915159
+      }
+    },
+    "E4/fold3/seed29": {
+      "experiment": "E4",
+      "extras": {},
+      "fold": 3,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9836223721504211,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 298
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 102,
+          "reason": null,
+          "value": 0.45098039215686275
+        },
+        "censored": 13,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.2705161301754868
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.2710541970251747
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 7,
+        "final_train_nll": 2.418449904402871,
+        "final_val_nll": 3.368126685693793,
+        "generalization_gap_at_best": 0.3667570912931195,
+        "generalization_gap_final": 0.9496767812909219,
+        "train_nll_at_best": 2.804573175050225,
+        "val_nll_at_best": 3.1713302663433445
+      }
+    },
+    "E4/fold3/seed7": {
+      "experiment": "E4",
+      "extras": {},
+      "fold": 3,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9836223721504211,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 298
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 102,
+          "reason": null,
+          "value": 0.39215686274509803
+        },
+        "censored": 13,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.23833965222074935
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.2712882743993155
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 3,
+        "final_train_nll": 2.4953278219188584,
+        "final_val_nll": 3.3503636777256456,
+        "generalization_gap_at_best": 0.23099412818980714,
+        "generalization_gap_final": 0.8550358558067872,
+        "train_nll_at_best": 2.954226364283617,
+        "val_nll_at_best": 3.185220492473424
+      }
+    },
+    "E4/fold4/seed17": {
+      "experiment": "E4",
+      "extras": {},
+      "fold": 4,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9833158254623413,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 286
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 99,
+          "reason": null,
+          "value": 0.8181818181818182
+        },
+        "censored": 15,
+        "events": 9,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.24631590846980309
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.8882381431758404
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 4,
+        "final_train_nll": 2.5317624368581244,
+        "final_val_nll": 3.112585500376006,
+        "generalization_gap_at_best": -0.052046166446432895,
+        "generalization_gap_final": 0.5808230635178817,
+        "train_nll_at_best": 2.9798559640588698,
+        "val_nll_at_best": 2.927809797612437
+      }
+    },
+    "E4/fold4/seed29": {
+      "experiment": "E4",
+      "extras": {},
+      "fold": 4,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9833158254623413,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 286
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 99,
+          "reason": null,
+          "value": 0.696969696969697
+        },
+        "censored": 15,
+        "events": 9,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.23448496233556668
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.9195234809691706
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 4,
+        "final_train_nll": 2.522401693453676,
+        "final_val_nll": 3.156991197387727,
+        "generalization_gap_at_best": -0.028033898429530524,
+        "generalization_gap_final": 0.634589503934051,
+        "train_nll_at_best": 2.9793567737972166,
+        "val_nll_at_best": 2.951322875367686
+      }
+    },
+    "E4/fold4/seed7": {
+      "experiment": "E4",
+      "extras": {},
+      "fold": 4,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9833158254623413,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 286
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 99,
+          "reason": null,
+          "value": 0.6464646464646465
+        },
+        "censored": 15,
+        "events": 9,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.25101325737455166
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.9133057749519744
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 3,
+        "final_train_nll": 2.5472291674841463,
+        "final_val_nll": 3.131465946377677,
+        "generalization_gap_at_best": -0.06757788759591321,
+        "generalization_gap_final": 0.5842367788935308,
+        "train_nll_at_best": 3.0087492976331363,
+        "val_nll_at_best": 2.941171410037223
+      }
+    },
+    "E5/fold0/seed17": {
+      "experiment": "E5",
+      "extras": {
+        "alpha_best": 0.24537457525730133,
+        "clinical_logit_norm": 3.717611074447632,
+        "mri_residual_logit_norm": 4.8602728843688965
+      },
+      "fold": 0,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9850823283195496,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 272
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 90,
+          "reason": null,
+          "value": 0.8111111111111111
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.11975370789184017
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.8281040214560926
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 20,
+        "final_train_nll": 2.483971849121238,
+        "final_val_nll": 2.902472766781892,
+        "generalization_gap_at_best": 0.1585003671880867,
+        "generalization_gap_final": 0.418500917660654,
+        "train_nll_at_best": 2.688721394621386,
+        "val_nll_at_best": 2.8472217618094726
+      }
+    },
+    "E5/fold0/seed29": {
+      "experiment": "E5",
+      "extras": {
+        "alpha_best": 0.30941131711006165,
+        "clinical_logit_norm": 4.287270545959473,
+        "mri_residual_logit_norm": 6.889892578125
+      },
+      "fold": 0,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9850823283195496,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 272
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 90,
+          "reason": null,
+          "value": 0.7666666666666667
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.11346472524297012
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.792093987988774
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 27,
+        "final_train_nll": 2.4362503670998805,
+        "final_val_nll": 2.9167160828889434,
+        "generalization_gap_at_best": 0.2509010090175443,
+        "generalization_gap_final": 0.48046571578906283,
+        "train_nll_at_best": 2.600153016592272,
+        "val_nll_at_best": 2.8510540256098165
+      }
+    },
+    "E5/fold0/seed7": {
+      "experiment": "E5",
+      "extras": {
+        "alpha_best": 0.1483634114265442,
+        "clinical_logit_norm": 4.591273307800293,
+        "mri_residual_logit_norm": 2.4252870082855225
+      },
+      "fold": 0,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9850823283195496,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 272
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 90,
+          "reason": null,
+          "value": 0.5444444444444444
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.17486129565083494
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.826158901248127
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 13,
+        "final_train_nll": 2.5601119459727615,
+        "final_val_nll": 2.8883001942329334,
+        "generalization_gap_at_best": 0.07309977694438352,
+        "generalization_gap_final": 0.3281882482601719,
+        "train_nll_at_best": 2.777735761887879,
+        "val_nll_at_best": 2.8508355388322624
+      }
+    },
+    "E5/fold1/seed17": {
+      "experiment": "E5",
+      "extras": {
+        "alpha_best": 0.004356590565294027,
+        "clinical_logit_norm": 2.026851177215576,
+        "mri_residual_logit_norm": 0.3873156011104584
+      },
+      "fold": 1,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9840143322944641,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 284
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 119,
+          "reason": null,
+          "value": 0.7142857142857143
+        },
+        "censored": 14,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.20537742663554812
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.0921409783139824
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.804680250692488,
+        "final_val_nll": 2.9888610081153484,
+        "generalization_gap_at_best": 0.05112470083101517,
+        "generalization_gap_final": 0.18418075742286044,
+        "train_nll_at_best": 2.900029037146824,
+        "val_nll_at_best": 2.951153737977839
+      }
+    },
+    "E5/fold1/seed29": {
+      "experiment": "E5",
+      "extras": {
+        "alpha_best": -0.17565739154815674,
+        "clinical_logit_norm": 2.3050789833068848,
+        "mri_residual_logit_norm": 2.319780111312866
+      },
+      "fold": 1,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9840143322944641,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 284
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 119,
+          "reason": null,
+          "value": 0.6638655462184874
+        },
+        "censored": 14,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.21828362516990651
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.0906743969861417
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 15,
+        "final_train_nll": 2.556124054365436,
+        "final_val_nll": 3.1102887111553685,
+        "generalization_gap_at_best": 0.1528809807285363,
+        "generalization_gap_final": 0.5541646567899323,
+        "train_nll_at_best": 2.805211595943347,
+        "val_nll_at_best": 2.9580925766718833
+      }
+    },
+    "E5/fold1/seed7": {
+      "experiment": "E5",
+      "extras": {
+        "alpha_best": 0.11002901941537857,
+        "clinical_logit_norm": 2.187600612640381,
+        "mri_residual_logit_norm": 1.4007378816604614
+      },
+      "fold": 1,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9840143322944641,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 284
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 119,
+          "reason": null,
+          "value": 0.680672268907563
+        },
+        "censored": 14,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.2071881890767822
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.089940850306302
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 11,
+        "final_train_nll": 2.603915240988995,
+        "final_val_nll": 3.117894702228748,
+        "generalization_gap_at_best": 0.10013549604791372,
+        "generalization_gap_final": 0.513979461239753,
+        "train_nll_at_best": 2.850653900207984,
+        "val_nll_at_best": 2.9507893962558978
+      }
+    },
+    "E5/fold2/seed17": {
+      "experiment": "E5",
+      "extras": {
+        "alpha_best": -0.17276930809020996,
+        "clinical_logit_norm": 1.662711501121521,
+        "mri_residual_logit_norm": 2.7632558345794678
+      },
+      "fold": 2,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9844118356704712,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 288
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 96,
+          "reason": null,
+          "value": 0.59375
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.26966702241262824
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.981577227152884
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 15,
+        "final_train_nll": 2.6376076641003134,
+        "final_val_nll": 3.0363168123445425,
+        "generalization_gap_at_best": 0.044199153776750766,
+        "generalization_gap_final": 0.3987091482442291,
+        "train_nll_at_best": 2.8681069692526076,
+        "val_nll_at_best": 2.9123061230293583
+      }
+    },
+    "E5/fold2/seed29": {
+      "experiment": "E5",
+      "extras": {
+        "alpha_best": 0.002197749214246869,
+        "clinical_logit_norm": 1.7334741353988647,
+        "mri_residual_logit_norm": 0.38468801975250244
+      },
+      "fold": 2,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9844118356704712,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 288
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 96,
+          "reason": null,
+          "value": 0.5208333333333334
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.25592902967755615
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.979353040829301
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.87764153234076,
+        "final_val_nll": 2.9277921908688245,
+        "generalization_gap_at_best": -0.05266711047261685,
+        "generalization_gap_final": 0.05015065852806444,
+        "train_nll_at_best": 2.9627326711912163,
+        "val_nll_at_best": 2.9100655607185995
+      }
+    },
+    "E5/fold2/seed7": {
+      "experiment": "E5",
+      "extras": {
+        "alpha_best": 0.2192617654800415,
+        "clinical_logit_norm": 2.470188617706299,
+        "mri_residual_logit_norm": 4.6814093589782715
+      },
+      "fold": 2,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9844118356704712,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 288
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 96,
+          "reason": null,
+          "value": 0.5833333333333334
+        },
+        "censored": 15,
+        "events": 10,
+        "ipcw_brier": {
+          "n": 25,
+          "reason": null,
+          "value": 0.31827167039525533
+        },
+        "landmark": "first_eligible",
+        "n": 25,
+        "observations": 25,
+        "patients": 25,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.013789727501571
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 19,
+        "final_train_nll": 2.570829075425645,
+        "final_val_nll": 3.031197336319122,
+        "generalization_gap_at_best": 0.15056060913529512,
+        "generalization_gap_final": 0.46036826089347693,
+        "train_nll_at_best": 2.7583171693636723,
+        "val_nll_at_best": 2.9088777784989674
+      }
+    },
+    "E5/fold3/seed17": {
+      "experiment": "E5",
+      "extras": {
+        "alpha_best": 0.003298765979707241,
+        "clinical_logit_norm": 2.836808681488037,
+        "mri_residual_logit_norm": 0.3635382354259491
+      },
+      "fold": 3,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9836223721504211,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 298
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 102,
+          "reason": null,
+          "value": 0.6764705882352942
+        },
+        "censored": 13,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.16896699696462156
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.1824779332673643
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.69213979620024,
+        "final_val_nll": 3.1014134446218233,
+        "generalization_gap_at_best": 0.28003522873568354,
+        "generalization_gap_final": 0.4092736484215833,
+        "train_nll_at_best": 2.7955871778414902,
+        "val_nll_at_best": 3.075622406577174
+      }
+    },
+    "E5/fold3/seed29": {
+      "experiment": "E5",
+      "extras": {
+        "alpha_best": 0.004964389838278294,
+        "clinical_logit_norm": 2.455160617828369,
+        "mri_residual_logit_norm": 0.33085107803344727
+      },
+      "fold": 3,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9836223721504211,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 298
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 102,
+          "reason": null,
+          "value": 0.6176470588235294
+        },
+        "censored": 13,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.1907285765541392
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.178632066992577
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 1,
+        "final_train_nll": 2.7289800596244844,
+        "final_val_nll": 3.094073440866731,
+        "generalization_gap_at_best": 0.20156951883981478,
+        "generalization_gap_final": 0.36509338124224655,
+        "train_nll_at_best": 2.8496789997364687,
+        "val_nll_at_best": 3.0512485185762834
+      }
+    },
+    "E5/fold3/seed7": {
+      "experiment": "E5",
+      "extras": {
+        "alpha_best": -0.15697045624256134,
+        "clinical_logit_norm": 2.765857458114624,
+        "mri_residual_logit_norm": 3.3807246685028076
+      },
+      "fold": 3,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9836223721504211,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 298
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 102,
+          "reason": null,
+          "value": 0.6274509803921569
+        },
+        "censored": 13,
+        "events": 11,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.18200085347903597
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 3.165727019853269
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 13,
+        "final_train_nll": 2.538849046442268,
+        "final_val_nll": 3.1999842246379764,
+        "generalization_gap_at_best": 0.29464594772714303,
+        "generalization_gap_final": 0.6611351781957082,
+        "train_nll_at_best": 2.7721334743661123,
+        "val_nll_at_best": 3.0667794220932554
+      }
+    },
+    "E5/fold4/seed17": {
+      "experiment": "E5",
+      "extras": {
+        "alpha_best": -0.2060544341802597,
+        "clinical_logit_norm": 1.781638503074646,
+        "mri_residual_logit_norm": 2.625805616378784
+      },
+      "fold": 4,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9833158254623413,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 286
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 99,
+          "reason": null,
+          "value": 0.7070707070707071
+        },
+        "censored": 15,
+        "events": 9,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.20347420542884373
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.8223006118399403
+      },
+      "seed": 17,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 17,
+        "final_train_nll": 2.616094108908087,
+        "final_val_nll": 3.0739548971670905,
+        "generalization_gap_at_best": 0.1503010855625715,
+        "generalization_gap_final": 0.45786078825900356,
+        "train_nll_at_best": 2.8210200215340566,
+        "val_nll_at_best": 2.971321107096628
+      }
+    },
+    "E5/fold4/seed29": {
+      "experiment": "E5",
+      "extras": {
+        "alpha_best": -0.18370164930820465,
+        "clinical_logit_norm": 1.4705537557601929,
+        "mri_residual_logit_norm": 3.038956642150879
+      },
+      "fold": 4,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9833158254623413,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 286
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 99,
+          "reason": null,
+          "value": 0.7575757575757576
+        },
+        "censored": 15,
+        "events": 9,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.21062214795107495
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.8682253879184523
+      },
+      "seed": 29,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 15,
+        "final_train_nll": 2.6619004003037636,
+        "final_val_nll": 3.086173848860508,
+        "generalization_gap_at_best": 0.085971745089644,
+        "generalization_gap_final": 0.42427344855674454,
+        "train_nll_at_best": 2.880594898364326,
+        "val_nll_at_best": 2.96656664345397
+      }
+    },
+    "E5/fold4/seed7": {
+      "experiment": "E5",
+      "extras": {
+        "alpha_best": 0.18375378847122192,
+        "clinical_logit_norm": 1.6716382503509521,
+        "mri_residual_logit_norm": 2.4095258712768555
+      },
+      "fold": 4,
+      "pca": {
+        "dimension": 64,
+        "explained_variance_ratio_sum": 0.9833158254623413,
+        "fit_scope": "training_fold_eligible_landmarks_only",
+        "sample_count": 286
+      },
+      "primary": {
+        "available": true,
+        "c_index": {
+          "comparable_pairs": 99,
+          "reason": null,
+          "value": 0.7575757575757576
+        },
+        "censored": 15,
+        "events": 9,
+        "ipcw_brier": {
+          "n": 24,
+          "reason": null,
+          "value": 0.20807469160972
+        },
+        "landmark": "first_eligible",
+        "n": 24,
+        "observations": 24,
+        "patients": 24,
+        "risk_definition": "1-S(365)",
+        "survival_nll": 2.8672403960178294
+      },
+      "seed": 7,
+      "shuffle": null,
+      "training": {
+        "best_epoch": 15,
+        "final_train_nll": 2.6668133067602735,
+        "final_val_nll": 3.1009356736765037,
+        "generalization_gap_at_best": 0.06391917729109897,
+        "generalization_gap_final": 0.4341223669162302,
+        "train_nll_at_best": 2.9081331595585773,
+        "val_nll_at_best": 2.9720523368496763
+      }
+    }
+  }
+}
