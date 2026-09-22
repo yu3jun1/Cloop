@@ -71,6 +71,12 @@ CUDA_VISIBLE_DEVICES=7 "$PY" -m cloop --config configs/default.yaml \
 
 For a complete-epoch recovery, repeat the matching training command with `--resume`. `last.pt` includes the model, optimizer, early-stopping state, data generator, and Python/NumPy/Torch RNG states. It is removed after the selected training suite finishes.
 
+CLI `train` and `synthetic` commands mirror stdout and stderr to
+`logs/<run>.log` while retaining terminal output. Repeated or resumed commands
+append timestamped sections to the same per-run log. The repository-level
+`logs/` directory is ignored by Git and is intentionally separate from the
+strict flat artifact directory under `outputs/`.
+
 `freeze-protocol` requires validation-derived uncertainty scales, an existing
 `models.pt`, and no outstanding `last.pt`. It records the SHA-256 of
 `models.pt` in `run.json`. After freezing, `prepare`, all training (including

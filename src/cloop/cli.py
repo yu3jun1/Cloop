@@ -5,8 +5,10 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from contextlib import contextmanager, redirect_stderr, redirect_stdout
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Sequence
+from typing import Iterator, Sequence, TextIO
 
 from .artifacts import ArtifactError, RunArtifacts
 from .config import ConfigError, load_config
@@ -29,6 +31,59 @@ from .planner import PlannerError
 from .outcome import OutcomeError
 from .policy import PolicyError
 from .world import WorldModelError
+
+
+class _Tee:
+    """Minimal text stream that mirrors CLI output to terminal and a log file."""
+
+    def __init__(self, *streams: TextIO):
+        self.streams = streams
+
+    def write(self, data: str) -> int:
+        for stream in self.streams:
+            stream.write(data)
+        return len(data)
+
+    def flush(self) -> None:
+        for stream in self.streams:
+            stream.flush()
+
+    def isatty(self) -> bool:
+        return False
+
+
+@contextmanager
+def _training_log(
+    config: dict, run_name: str, operation: str
+) -> Iterator[Path]:
+    log_root = Path(config["paths"]["project_root"]) / "logs"
+    log_root.mkdir(parents=True, exist_ok=True)
+    log_path = log_root / f"{run_name}.log"
+    with log_path.open("a", encoding="utf-8", buffering=1) as handle:
+        with redirect_stdout(_Tee(sys.stdout, handle)), redirect_stderr(
+            _Tee(sys.stderr, handle)
+        ):
+            started = datetime.now(timezone.utc).isoformat()
+            print(
+                f"[{started}] cloop {operation} started; log={log_path}",
+                file=sys.stderr,
+            )
+            try:
+                yield log_path
+            except BaseException as exc:
+                failed = datetime.now(timezone.utc).isoformat()
+                print(
+                    f"[{failed}] cloop {operation} failed: "
+                    f"{type(exc).__name__}: {exc}",
+                    file=sys.stderr,
+                )
+                raise
+            else:
+                finished = datetime.now(timezone.utc).isoformat()
+                print(
+                    f"[{finished}] cloop {operation} completed",
+                    file=sys.stderr,
+                )
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -96,23 +151,39 @@ def main(argv: Sequence[str] | None = None) -> None:
             print(json.dumps({"run": run_name, "cohort": result["cohort"], "audit": result["audit"]}, indent=2))
         elif args.command == "train":
             seeds = args.seeds or config["training"]["seeds"]
-            if args.suite == "dynamics":
-                variants = args.variants or config["training"]["variants"]
-                train_dynamics(
-                    config, artifacts, variants, seeds, resume=args.resume, force_task=args.force_task
-                )
-            else:
-                if args.variants:
-                    parser.error("--variants is only valid for --suite dynamics")
-                train_outcome(config, artifacts, seeds, resume=args.resume, force_task=args.force_task)
+            operation = (
+                f"train/{args.suite} seeds={list(seeds)} "
+                f"resume={args.resume} force_task={args.force_task}"
+            )
+            with _training_log(config, run_name, operation):
+                if args.suite == "dynamics":
+                    variants = args.variants or config["training"]["variants"]
+                    train_dynamics(
+                        config,
+                        artifacts,
+                        variants,
+                        seeds,
+                        resume=args.resume,
+                        force_task=args.force_task,
+                    )
+                else:
+                    if args.variants:
+                        parser.error("--variants is only valid for --suite dynamics")
+                    train_outcome(
+                        config,
+                        artifacts,
+                        seeds,
+                        resume=args.resume,
+                        force_task=args.force_task,
+                    )
         elif args.command == "evaluate":
             evaluate_suite(
                 config, artifacts, args.suite, args.split, seeds=args.seeds, variants=args.variants
             )
         elif args.command == "synthetic":
-            run_synthetic_suite(
-                config, artifacts, run_name, args.seeds or config["training"]["seeds"]
-            )
+            seeds = args.seeds or config["training"]["seeds"]
+            with _training_log(config, run_name, f"synthetic seeds={list(seeds)}"):
+                run_synthetic_suite(config, artifacts, run_name, seeds)
         elif args.command == "freeze-protocol":
             freeze_protocol(config, artifacts)
         elif args.command == "report":
