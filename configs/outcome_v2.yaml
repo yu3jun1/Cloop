@@ -1,0 +1,12 @@
+outcome_v2:
+  base_run: brainiac_main_v1_provenance
+  run: outcome_v2_clarity_v1
+  folds: 5
+  fallback_folds: 3
+  fold_seed: 1701
+  seeds: [7, 17, 29]
+  pca_dim: 64
+  residual_hidden_dim: 32
+  variants: [baseline, rrt, ensemble, rrt_ensemble]
+  # Outcome-v2 never reads formal-test patients or prior dynamics checkpoints.
+  primary_landmark: first_eligible_per_patient
