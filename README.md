@@ -1,6 +1,6 @@
 # CLARITY Loop
 
-CLARITY Loop is a research framework for training and evaluating recursive-rollout (RRT) ensemble dynamics from frozen longitudinal MRI latents, linking predicted states to a separately trained censored-survival head, and testing receding-horizon replanning. It is intentionally offline by default and does not execute treatment.
+Coop is a research framework for training and evaluating recursive-rollout (RRT) ensemble dynamics from frozen longitudinal MRI latents, linking predicted states to a separately trained censored-survival head, and testing receding-horizon replanning. It is intentionally offline by default and does not execute treatment.
 
 The implementation keeps three evidence levels separate:
 
