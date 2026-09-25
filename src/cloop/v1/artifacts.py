@@ -98,7 +98,7 @@ def upsert_jsonl(path: str | Path, records: list[dict[str, Any]]) -> None:
 
 class RunArtifacts:
     allowed_names = {"run.json", "models.pt", "last.pt", "metrics.json", "predictions.jsonl", "report.md"}
-    allowed_versions = {"v1", "v1_1", "v2", "v3"}
+    allowed_versions = {"v1", "v1_1", "v2", "v3", "v4"}
 
     def __init__(self, output_root: str | Path, run_name: str, *, version: str = "v1"):
         if not run_name or "/" in run_name or "\\" in run_name or run_name in {".", ".."}:
