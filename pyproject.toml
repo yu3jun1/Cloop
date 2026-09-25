@@ -10,7 +10,7 @@ dependencies = ["torch", "numpy", "PyYAML"]
 dev = ["pytest"]
 
 [project.scripts]
-cloop = "cloop.cli:main"
+cloop = "cloop.v1.cli:main"
 
 [build-system]
 requires = ["setuptools>=64"]

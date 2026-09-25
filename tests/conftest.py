@@ -5,8 +5,8 @@ from pathlib import Path
 
 import pytest
 
-from cloop.config import load_config
-from cloop.data import fit_preprocessing, load_bundle, make_tiny_cache, split_patients
+from cloop.v1.config import load_config
+from cloop.v1.data import fit_preprocessing, load_bundle, make_tiny_cache, split_patients
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 @pytest.fixture
 def config():
-    cfg = load_config(ROOT / "configs" / "default.yaml")
+    cfg = load_config(ROOT / "configs" / "v1" / "default.yaml")
     cfg["project"]["device"] = "cpu"
     cfg["data"]["min_action_support"] = 1
     cfg["world"].update(

@@ -1,0 +1,17 @@
+next_stage:
+  base_run: brainiac_main_v1_provenance
+  world_run: outcome_v2_clarity_v1
+  run: next_stage_v1
+  planner_run: next_stage_toy_v1
+  seeds: [7, 17, 29]
+  max_horizon: 3
+  outcome_world: rrt_ensemble
+  hidden_dim: 128
+  nhead: 4
+  layers: 2
+  max_epochs: 60
+  patience: 10
+  batch_size: 32
+  lr: 0.001
+  weight_decay: 0.0001
+  score_days: 365.0
