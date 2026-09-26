@@ -1,0 +1,60 @@
+clarity_downstream:
+  run: next_stage_clarity_outcome_v1
+  protocol: development_reuse
+  base_run: brainiac_main_v1_provenance
+  world_run: outcome_v2_clarity_v1
+
+  variants: [baseline, rrt, ensemble, rrt_ensemble]
+  seeds: [7, 17, 29]
+  horizons: [1, 2, 3]
+  primary_horizon: 2
+  head_scope: per_horizon
+  pair_mode: observed_start_predicted_endpoint
+  landmark: first_eligible_per_patient_per_horizon
+  label_anchor: target_landmark
+  administrative_censor_days: null
+
+  feature_batch_size: 32
+  token_mode: single_global_token
+  condition_mode: clinical_mask_target_history_elapsed
+  expected_latent_dim: 768
+  main_aggregation: mean_latent
+  train_outcome_independently: true
+  freeze_dynamics: true
+
+  head:
+    hidden_dim: 128
+    attention_dim: 128
+    num_twoway_layers: 2
+    num_heads: 4
+    dropout: 0.3
+
+  training:
+    full_cohort_loss: true
+    lr: 0.001
+    weight_decay: 0.0001
+    max_epochs: 300
+    patience: 40
+    grad_clip: 1.0
+    outcome_split_seed: 1701
+    early_stop_metric: cox_bce
+    cox_ties: breslow
+    cox_weight: 0.5
+    bce_weight: 0.5
+    probability_horizon_days: 365.0
+
+  uncertainty:
+    enabled: true
+    retrain_head: false
+    compare_probability_aggregation: true
+    score: probability_std
+    coverages: [1.0, 0.8, 0.6]
+    threshold_mode: rank_curve
+    random_reference_repeats: 200
+
+  evaluation:
+    primary_metric: c_index_risk
+    companion_metric: ipcw_brier365
+    report_td_auc365: true
+    aggregate_seeds_within_fold: true
+    paired_bootstrap_repeats: 0
