@@ -32,6 +32,23 @@ PY=/home/tanyuejun/miniconda3/envs/py310/bin/python
 `configs/v1/default.yaml`、`configs/v1/server.yaml` 和 `configs/v3/next_stage.yaml`。
 如需 GPU，可使用 `CUDA_VISIBLE_DEVICES=7` 以及 `--device cuda:0`。
 
+## CLARITY outcome 后续诊断
+
+对 `next_stage_clarity_outcome_v1` 的训练/checkpoint 和预测 post latent
+利用情况，使用独立的只读诊断入口：
+
+```bash
+PY=/home/tanyuejun/miniconda3/envs/py310/bin/python
+CUDA_VISIBLE_DEVICES=7 "$PY" -m cloop.v3.clarity_outcome_diagnostics --device cuda:0
+```
+
+配置固定在 `configs/v3/clarity_outcome_diagnostics.yaml`。程序核对全部
+训练日志与实际保存的 head 哈希，再对预先指定的 H2 运行 normal predicted
+post、20 次患者内无固定点重排以及 observed post 替换。normal 不能复现原
+指标时，该任务不会继续解释扰动结果。源目录保持只读，输出写入
+`outputs/v3/next_stage_clarity_outcome_diagnostics_v1/`；epoch 0 与训练后
+checkpoint 分层报告，且不运行 uncertainty 筛选或重新训练 outcome。
+
 ## 实验协议
 
 - **动力学**：只读复用 Outcome-v2 按患者分折训练的 baseline、RRT、

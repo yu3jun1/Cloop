@@ -1,0 +1,37 @@
+{
+  "completed_tasks": [
+    "audit",
+    "post_diagnostic",
+    "report"
+  ],
+  "config": {
+    "horizons": [
+      2
+    ],
+    "metric_reproduction_tolerance": 1e-07,
+    "permutation_repeats": 20,
+    "permutation_seed_base": 26092026,
+    "run": "next_stage_clarity_outcome_diagnostics_v1",
+    "source_run": "next_stage_clarity_outcome_v1",
+    "variants": [
+      "baseline",
+      "rrt",
+      "ensemble",
+      "rrt_ensemble"
+    ]
+  },
+  "formal_test_untouched": true,
+  "outcome_retrained": false,
+  "read_only_source": true,
+  "run": "next_stage_clarity_outcome_diagnostics_v1",
+  "schema_version": "cloop_clarity_outcome_diagnostics_v1",
+  "signature": "444b740698f89c43d4fb8d497e99de6dbc6aeb8fc9b2092bf5792231ddff14f6",
+  "source_metrics_sha256": "52c555ec62dff3c6be25a9a93749f678d98a9a4b6d5655006282a6087bde8cc3",
+  "source_protocol": "development_reuse",
+  "source_repository_commit": "f24ed763daf9e078180f86bb3ac2d784b0bdc2ad",
+  "source_run": "next_stage_clarity_outcome_v1",
+  "source_run_sha256": "0856f2e42f4f020c2594716c0d66709db8ae818d549c974a30886fc4b80fa35f",
+  "source_schema_version": "cloop_clarity_outcome_v1",
+  "source_signature": "a7aef8637886bc9a2c001946af7f30af7fff2b70159a2eb5993b77708a7fcafd",
+  "uncertainty_analysis_run": false
+}

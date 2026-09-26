@@ -1,0 +1,12 @@
+clarity_outcome_diagnostics:
+  run: next_stage_clarity_outcome_diagnostics_v1
+  source_run: next_stage_clarity_outcome_v1
+
+  # Diagnose the pre-specified primary horizon before inspecting H1/H3.
+  variants: [baseline, rrt, ensemble, rrt_ensemble]
+  horizons: [2]
+
+  # These seeds are fixed before evaluating any shuffled-post result.
+  permutation_repeats: 20
+  permutation_seed_base: 26092026
+  metric_reproduction_tolerance: 0.0000001
