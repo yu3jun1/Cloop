@@ -1,5 +1,12 @@
-"""Cloop v4 uncertainty-aware trajectory and planning experiments."""
+"""Cloop v4.1 calibrated trajectory and closed-loop planning experiments."""
 
-from .trajectory import DualHeadOutcomeModel, TrajectoryEncoder
+from .outcome import TrajectoryOutcomeModel
+from .trajectory import TemporalEmbedding, TrajectoryEncoder
 
-__all__ = ["DualHeadOutcomeModel", "TrajectoryEncoder"]
+# Historical import name retained without retaining the independent value head.
+DualHeadOutcomeModel = TrajectoryOutcomeModel
+
+__all__ = [
+    "DualHeadOutcomeModel", "TemporalEmbedding", "TrajectoryEncoder",
+    "TrajectoryOutcomeModel",
+]

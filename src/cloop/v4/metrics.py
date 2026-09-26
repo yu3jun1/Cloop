@@ -92,3 +92,73 @@ def regression_calibration(
         "spearman_reason": reason,
         "bins": rows,
     }
+
+def survival_brier_errors(
+    times: Sequence[float],
+    events: Sequence[int],
+    survival_probability: Sequence[float],
+    horizon_days: float,
+) -> tuple[list[float], list[int]]:
+    """Return identifiable fixed-horizon Brier errors and source indices."""
+    time = np.asarray(times, dtype=float)
+    event = np.asarray(events, dtype=int)
+    survival = np.asarray(survival_probability, dtype=float)
+    if time.shape != event.shape or event.shape != survival.shape or time.ndim != 1:
+        raise ValueError("survival error inputs must be matching vectors")
+    if horizon_days <= 0:
+        raise ValueError("horizon_days must be positive")
+    if np.any((event != 0) & (event != 1)):
+        raise ValueError("events must be binary")
+    event_by_horizon = (event == 1) & (time <= horizon_days)
+    known_survival = time > horizon_days
+    identifiable = event_by_horizon | known_survival
+    finite = np.isfinite(time) & np.isfinite(survival)
+    selected = np.flatnonzero(identifiable & finite)
+    target_survival = known_survival.astype(float)
+    errors = (survival[selected] - target_survival[selected]) ** 2
+    return errors.tolist(), selected.astype(int).tolist()
+
+
+def outcome_uncertainty_calibration(
+    times: Sequence[float],
+    events: Sequence[int],
+    survival_probability: Sequence[float],
+    risk_variance: Sequence[float],
+    horizon_days: float,
+    *,
+    bins: int = 5,
+) -> dict[str, Any]:
+    """Calibrate ensemble outcome-risk variance against survival Brier error."""
+    variance = np.asarray(risk_variance, dtype=float)
+    errors, indices = survival_brier_errors(
+        times, events, survival_probability, horizon_days,
+    )
+    if variance.ndim != 1 or len(variance) != len(times):
+        raise ValueError("risk_variance must contain one value per prediction")
+    selected_variance = variance[np.asarray(indices, dtype=int)]
+    result = regression_calibration(selected_variance.tolist(), errors, bins=bins)
+    result.update({
+        "identifiable": len(indices),
+        "uncertainty_definition": "ensemble outcome-risk variance",
+        "error_definition": "identifiable fixed-horizon survival Brier error",
+    })
+    return result
+
+
+def survival_selective_prediction(
+    times: Sequence[float],
+    events: Sequence[int],
+    survival_probability: Sequence[float],
+    risk_uncertainty: Sequence[float],
+    horizon_days: float,
+    coverages: Sequence[float] = (1.0, 0.9, 0.8, 0.6, 0.4),
+) -> list[dict[str, Any]]:
+    """Coverage-risk curve ranked by outcome uncertainty, not latent error."""
+    uncertainty = np.asarray(risk_uncertainty, dtype=float)
+    errors, indices = survival_brier_errors(
+        times, events, survival_probability, horizon_days,
+    )
+    if uncertainty.ndim != 1 or len(uncertainty) != len(times):
+        raise ValueError("risk_uncertainty must contain one value per prediction")
+    selected_uncertainty = uncertainty[np.asarray(indices, dtype=int)]
+    return coverage_risk_curve(errors, selected_uncertainty.tolist(), coverages)
